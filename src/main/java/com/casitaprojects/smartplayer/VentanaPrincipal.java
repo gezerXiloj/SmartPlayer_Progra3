@@ -17,6 +17,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        // 1. Instanciamos tu nuevo JPanel Form
+        panelBiblioteca vistaBiblioteca = new panelBiblioteca();
+        
+        // 2. Lo agregamos a tu PanelCentral y le ponemos un "Apodo"
+        pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
     }
 
     /**
@@ -56,9 +61,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnBucle = new javax.swing.JToggleButton();
         sldTime = new javax.swing.JSlider();
         sldVolumen = new javax.swing.JSlider();
-        jLabel4 = new javax.swing.JLabel();
+        lblVol = new javax.swing.JLabel();
         lblDuracion = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
+        pnlCentral = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -236,7 +242,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         btnBucle.setText("R");
 
-        jLabel4.setText("jLabel4");
+        lblVol.setText("jLabel4");
 
         lblDuracion.setText("00:00");
 
@@ -275,7 +281,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PlayerInferiorLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))
@@ -300,17 +306,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                 .addComponent(tbtnLike))
                             .addGroup(PlayerInferiorLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tbtnShuffle)
-                                    .addComponent(btnBucle)
+                                .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(PlayerInferiorLayout.createSequentialGroup()
                                         .addGap(26, 26, 26)
                                         .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tbtnShuffle)
+                                        .addComponent(btnBucle)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(sldTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -320,6 +327,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        pnlCentral.setLayout(new java.awt.CardLayout());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -328,8 +337,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(SideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TopBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 18, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(TopBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 18, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnlCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
             .addComponent(PlayerInferior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -338,8 +352,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TopBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(TopBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PlayerInferior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -351,7 +368,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArbolABBActionPerformed
 
     private void btnBlibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBlibliotecaActionPerformed
-        // TODO add your handling code here:
+       java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        
+        // Mostramos la carta usando el "Apodo" que le pusimos arriba
+        layout.show(pnlCentral, "CARTA_BIBLIOTECA");
     }//GEN-LAST:event_btnBlibliotecaActionPerformed
 
     private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
@@ -400,7 +420,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnPlaylist;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblAlbum;
     private javax.swing.JLabel lblArtista;
     private javax.swing.JLabel lblCaratula;
@@ -409,6 +428,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblSmart;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblVol;
+    private javax.swing.JPanel pnlCentral;
     private javax.swing.JPanel pnlDatos;
     private javax.swing.JSlider sldTime;
     private javax.swing.JSlider sldVolumen;

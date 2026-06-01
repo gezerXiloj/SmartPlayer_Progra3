@@ -27,8 +27,16 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="SideBar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="TopBar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="18" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="TopBar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="18" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="pnlCentral" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
           </Group>
           <Component id="PlayerInferior" alignment="1" max="32767" attributes="0"/>
       </Group>
@@ -39,9 +47,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="SideBar" min="-2" max="-2" attributes="0"/>
-                  <Component id="TopBar" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="TopBar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnlCentral" max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="PlayerInferior" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -313,7 +325,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jLabel4" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="lblVol" min="-2" pref="37" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="sldVolumen" min="-2" pref="100" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
@@ -346,18 +358,20 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btnBack" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
-                                      <Component id="btnPlay" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                                      <Component id="btnNext" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
-                                      <Component id="tbtnShuffle" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnBucle" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="sldVolumen" alignment="3" min="-2" pref="11" max="-2" attributes="0"/>
-                                              <Component id="jLabel4" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                              <Component id="lblVol" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                           </Group>
+                                      </Group>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="btnBack" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                                          <Component id="btnPlay" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="btnNext" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                                          <Component id="tbtnShuffle" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnBucle" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -442,7 +456,7 @@
         </Component>
         <Component class="javax.swing.JSlider" name="sldVolumen">
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="lblVol">
           <Properties>
             <Property name="text" type="java.lang.String" value="jLabel4"/>
           </Properties>
@@ -458,6 +472,10 @@
           </Properties>
         </Component>
       </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="pnlCentral">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
     </Container>
   </SubComponents>
 </Form>

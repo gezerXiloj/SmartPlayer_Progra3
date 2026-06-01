@@ -11,6 +11,7 @@ package com.casitaprojects.smartplayer;
 public class SmartPlayer {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+            VentanaPrincipal verSmart=new VentanaPrincipal();
+            verSmart.setVisible(true);
     }
 }
