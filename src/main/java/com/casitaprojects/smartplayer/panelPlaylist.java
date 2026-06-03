@@ -26,19 +26,145 @@ public class panelPlaylist extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        menuOpciones = new javax.swing.JPopupMenu();
+        itemRenombrar = new javax.swing.JMenuItem();
+        itemExportar = new javax.swing.JMenuItem();
+        itemEncriptar = new javax.swing.JMenuItem();
+        itemEliminar = new javax.swing.JMenuItem();
+        pnlDerecho = new javax.swing.JPanel();
+        pnlIzquierdo = new javax.swing.JPanel();
+        pnlCabecera = new javax.swing.JPanel();
+        lblPortada = new javax.swing.JLabel();
+        lblNombPlay = new javax.swing.JLabel();
+        lblCantidadTime = new javax.swing.JLabel();
+        btnPlayLista = new javax.swing.JButton();
+        btnMenu = new javax.swing.JButton();
+
+        itemRenombrar.setText("RENOMBRAR");
+        menuOpciones.add(itemRenombrar);
+
+        itemExportar.setText("EXPORTAR");
+        menuOpciones.add(itemExportar);
+
+        itemEncriptar.setText("ENCRIPTAR");
+        menuOpciones.add(itemEncriptar);
+
+        itemEliminar.setText("ELIMINAR");
+        menuOpciones.add(itemEliminar);
+
+        javax.swing.GroupLayout pnlDerechoLayout = new javax.swing.GroupLayout(pnlDerecho);
+        pnlDerecho.setLayout(pnlDerechoLayout);
+        pnlDerechoLayout.setHorizontalGroup(
+            pnlDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlDerechoLayout.setVerticalGroup(
+            pnlDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 345, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pnlIzquierdoLayout = new javax.swing.GroupLayout(pnlIzquierdo);
+        pnlIzquierdo.setLayout(pnlIzquierdoLayout);
+        pnlIzquierdoLayout.setHorizontalGroup(
+            pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 224, Short.MAX_VALUE)
+        );
+        pnlIzquierdoLayout.setVerticalGroup(
+            pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        lblPortada.setText("PORTADA");
+
+        lblNombPlay.setText("Favorita");
+
+        lblCantidadTime.setText("42 canciones • 2h 48m");
+
+        btnPlayLista.setText("PLAY LISTA");
+
+        btnMenu.setText("⋮");
+        btnMenu.setBorderPainted(false);
+        btnMenu.setContentAreaFilled(false);
+        btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMenu.setFocusPainted(false);
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlCabeceraLayout = new javax.swing.GroupLayout(pnlCabecera);
+        pnlCabecera.setLayout(pnlCabeceraLayout);
+        pnlCabeceraLayout.setHorizontalGroup(
+            pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCabeceraLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(lblPortada, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNombPlay)
+                    .addComponent(lblCantidadTime))
+                .addGap(48, 48, 48)
+                .addComponent(btnPlayLista, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
+        );
+        pnlCabeceraLayout.setVerticalGroup(
+            pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblPortada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlCabeceraLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlCabeceraLayout.createSequentialGroup()
+                        .addComponent(lblNombPlay)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCantidadTime))
+                    .addGroup(pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnPlayLista, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 639, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(pnlIzquierdo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlDerecho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addComponent(pnlIzquierdo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlDerecho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMenuActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnPlayLista;
+    private javax.swing.JMenuItem itemEliminar;
+    private javax.swing.JMenuItem itemEncriptar;
+    private javax.swing.JMenuItem itemExportar;
+    private javax.swing.JMenuItem itemRenombrar;
+    private javax.swing.JLabel lblCantidadTime;
+    private javax.swing.JLabel lblNombPlay;
+    private javax.swing.JLabel lblPortada;
+    private javax.swing.JPopupMenu menuOpciones;
+    private javax.swing.JPanel pnlCabecera;
+    private javax.swing.JPanel pnlDerecho;
+    private javax.swing.JPanel pnlIzquierdo;
     // End of variables declaration//GEN-END:variables
 }
