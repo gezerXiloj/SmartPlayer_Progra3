@@ -9,14 +9,14 @@ package com.casitaprojects.smartplayer;
  * @author gezer
  */
 public class GestorReproductor {
-    // Aquí irán instanciadas tus estructuras cuando las creemos
-    // private ArbolAVL bibliotecaPrincipal;
-    // private ListaCircular playlistActual;
-    // private Pila historial;
-    // private Cola colaReproduccion;
+    public ArbolABB arbolABB;
+    public ArbolAVL arbolAVL;
+    public TablaHash tablaHash;
 
     public GestorReproductor() {
-        // Inicializar estructuras
+        arbolABB = new ArbolABB();
+        arbolAVL = new ArbolAVL();
+        tablaHash = new TablaHash();
     }
     
     // Método para medir el tiempo de búsqueda (Lo que pidió el Ingeniero)

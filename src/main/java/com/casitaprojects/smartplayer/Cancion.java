@@ -34,7 +34,16 @@ public class Cancion {
         this.id = (titulo + artista).replaceAll("\\s+", "").toLowerCase();
     }
 
-    // Aquí van tus Getters y Setters (clic derecho -> Insert Code -> Getters and Setters)
+    // --- GETTERS (Obligatorios para que los Árboles y Hash funcionen) ---
+    public String getTitulo() { return titulo; }
+    public String getArtista() { return artista; }
+    public String getAlbum() { return album; }
+    public String getGenero() { return genero; }
+    public String getDuracion() { return duracion; }
+    public long getTamanoBytes() { return tamanoBytes; }
+    public String getRutaArchivo() { return rutaArchivo; }
+    public String getAnio() { return anio; }
+    public String getId() { return id; }
     
     @Override
     public String toString() {
