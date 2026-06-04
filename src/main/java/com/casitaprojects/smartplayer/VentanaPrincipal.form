@@ -342,7 +342,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnNext" min="-2" pref="43" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="btnBucle" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="tbtnBucle" min="-2" pref="28" max="-2" attributes="0"/>
                       </Group>
                       <Component id="sldTime" max="32767" attributes="0"/>
                   </Group>
@@ -395,7 +395,7 @@
                                           <Component id="btnPlay" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                           <Component id="btnNext" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                                           <Component id="tbtnShuffle" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="btnBucle" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tbtnBucle" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -455,26 +455,41 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="S"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tbtnShuffleActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnBack">
           <Properties>
             <Property name="text" type="java.lang.String" value="&lt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPlay">
           <Properties>
             <Property name="text" type="java.lang.String" value="PLAY"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPlayActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnNext">
           <Properties>
             <Property name="text" type="java.lang.String" value="&gt;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNextActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="btnBucle">
+        <Component class="javax.swing.JToggleButton" name="tbtnBucle">
           <Properties>
-            <Property name="text" type="java.lang.String" value="R"/>
+            <Property name="text" type="java.lang.String" value="B"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tbtnBucleActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSlider" name="sldTime">
         </Component>

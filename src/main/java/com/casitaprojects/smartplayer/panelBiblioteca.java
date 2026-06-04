@@ -9,7 +9,8 @@ package com.casitaprojects.smartplayer;
  * @author gezer
  */
 public class panelBiblioteca extends javax.swing.JPanel {
-
+    
+    private java.util.List<Cancion> listaActual;
     /**
      * Creates new form panelBiblioteca
      */
@@ -45,6 +46,11 @@ public class panelBiblioteca extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblBiblioteca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBibliotecaMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblBiblioteca);
@@ -95,8 +101,26 @@ public class panelBiblioteca extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void tblBibliotecaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBibliotecaMouseClicked
+        // Validamos si fueron 2 clics
+        if (evt.getClickCount() == 2) {
+            int filaSeleccionada = tblBiblioteca.getSelectedRow();
+            if (filaSeleccionada != -1 && listaActual != null) {
+                
+                Cancion cancionClickeada = listaActual.get(filaSeleccionada);
+                VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+                
+                // --- NUEVO: CARGAMOS LA LISTA DOBLE CIRCULAR ---
+                ventana.gestor.listaReproduccion.cargarLista(listaActual, cancionClickeada);
+                
+                ventana.reproducirDesdeBiblioteca(cancionClickeada);
+            }
+        }
+    }//GEN-LAST:event_tblBibliotecaMouseClicked
+
     // --- METODO NUEVO PARA LLENAR LA TABLA ---
     public void actualizarTabla(java.util.List<Cancion> canciones) {
+        this.listaActual = canciones;        
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblBiblioteca.getModel();
         modelo.setRowCount(0); // Borra los datos anteriores para no duplicar
 
@@ -114,6 +138,11 @@ public class panelBiblioteca extends javax.swing.JPanel {
         }
     }
 
+    // --- GETTER PARA QUE VENTANA PRINCIPAL PUEDA VER LA TABLA ---
+    public javax.swing.JTable getTablaBiblioteca() {
+        return tblBiblioteca;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JLabel jLabel1;

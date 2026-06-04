@@ -106,7 +106,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
         btnPlay = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
-        btnBucle = new javax.swing.JToggleButton();
+        tbtnBucle = new javax.swing.JToggleButton();
         sldTime = new javax.swing.JSlider();
         sldVolumen = new javax.swing.JSlider();
         lblVol = new javax.swing.JLabel();
@@ -316,14 +316,39 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tbtnLike.setText("C");
 
         tbtnShuffle.setText("S");
+        tbtnShuffle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtnShuffleActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("<");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnPlay.setText("PLAY");
+        btnPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayActionPerformed(evt);
+            }
+        });
 
         btnNext.setText(">");
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
-        btnBucle.setText("R");
+        tbtnBucle.setText("B");
+        tbtnBucle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtnBucleActionPerformed(evt);
+            }
+        });
 
         lblVol.setText("jLabel4");
 
@@ -359,7 +384,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnBucle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tbtnBucle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(sldTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PlayerInferiorLayout.createSequentialGroup()
@@ -400,7 +425,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                         .addComponent(btnPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(tbtnShuffle)
-                                        .addComponent(btnBucle)))
+                                        .addComponent(tbtnBucle)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(sldTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -547,6 +572,120 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtBuscarActionPerformed
 
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+        MotorReproductor motor = MotorReproductor.getInstancia();
+        
+        if (motor.estaPausado()) {
+            motor.reanudar();
+            btnPlay.setText("||"); // Cambia icono a Pausa
+        } else {
+            motor.pausar();
+            btnPlay.setText("PLAY"); // Cambia icono a Play
+        }
+    }//GEN-LAST:event_btnPlayActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        Cancion anterior = gestor.listaReproduccion.obtenerAnterior();
+        
+        if (anterior != null) {
+            reproducirDesdeBiblioteca(anterior);
+            resaltarFilaEnTabla(anterior); // Para que se mueva la selección visual
+        }
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // Le pasamos el estado del botón Shuffle (true o false)
+        Cancion siguiente = gestor.listaReproduccion.obtenerSiguiente(tbtnShuffle.isSelected());
+        
+        if (siguiente != null) {
+            reproducirDesdeBiblioteca(siguiente);
+            resaltarFilaEnTabla(siguiente); // Para que se mueva la selección visual
+    }//GEN-LAST:event_btnNextActionPerformed
+    }
+    
+    private void tbtnShuffleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnShuffleActionPerformed
+        if (tbtnShuffle.isSelected()) {
+            // Se pinta de verde estilo Spotify cuando se activa
+            tbtnShuffle.setBackground(new java.awt.Color(30, 215, 96)); 
+            tbtnShuffle.setForeground(java.awt.Color.WHITE);
+            System.out.println("🔀 Modo Aleatorio: ACTIVADO");
+        } else {
+            // Regresa a su color normal cuando se desactiva
+            tbtnShuffle.setBackground(new javax.swing.JButton().getBackground()); 
+            tbtnShuffle.setForeground(java.awt.Color.BLACK);
+            System.out.println("➡️ Modo Secuencial: ACTIVADO");
+        }
+    }//GEN-LAST:event_tbtnShuffleActionPerformed
+
+    private void tbtnBucleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnBucleActionPerformed
+        if (tbtnBucle.isSelected()) {
+            // Se pinta de verde cuando se activa
+            tbtnBucle.setBackground(new java.awt.Color(30, 215, 96));
+            tbtnBucle.setForeground(java.awt.Color.WHITE);
+            System.out.println("🔁 Modo Bucle: ACTIVADO");
+        } else {
+            // Regresa a su color normal
+            tbtnBucle.setBackground(new javax.swing.JButton().getBackground());
+            tbtnBucle.setForeground(java.awt.Color.BLACK);
+            System.out.println("➡️ Modo Bucle: DESACTIVADO");
+        }
+    }//GEN-LAST:event_tbtnBucleActionPerformed
+
+    // --- METODO PARA REPRODUCIR Y ACTUALIZAR UI ---
+    public void reproducirDesdeBiblioteca(Cancion cancion) {
+        
+        // 1. Encendemos la música
+        MotorReproductor.getInstancia().reproducirCancion(cancion.getRutaArchivo());
+        
+        // 2. Actualizamos los textos del panel inferior
+        lblTitulo.setText(cancion.getTitulo());
+        lblArtista.setText(cancion.getArtista());
+        lblAlbum.setText(cancion.getAlbum());
+        lblDuracion.setText(cancion.getDuracion());
+        lblTime.setText("00:00"); // Reiniciamos el contador
+        
+        // Cambiamos el texto del botón Play para que diga PAUSE o cambie de icono
+        btnPlay.setText("||"); 
+        
+        // 3. Extraemos la carátula
+        try {
+            AudioFile audioFile = AudioFileIO.read(new File(cancion.getRutaArchivo()));
+            Tag tag = audioFile.getTag();
+            
+            if (tag != null && tag.getFirstArtwork() != null) {
+                // Si tiene foto, la convertimos a imagen
+                byte[] imageData = tag.getFirstArtwork().getBinaryData();
+                javax.swing.ImageIcon icon = new javax.swing.ImageIcon(imageData);
+                // La redimensionamos al tamaño de tu lblCaratula
+                java.awt.Image img = icon.getImage().getScaledInstance(lblCaratula.getWidth(), lblCaratula.getHeight(), java.awt.Image.SCALE_SMOOTH);
+                
+                lblCaratula.setIcon(new javax.swing.ImageIcon(img));
+                lblCaratula.setText(""); // Borramos el texto
+            } else {
+                // Si no tiene foto, la dejamos limpia (luego le puedes poner una de disco por defecto)
+                lblCaratula.setIcon(null);
+                lblCaratula.setText("Sin Portada");
+            }
+        } catch (Exception e) {
+            lblCaratula.setIcon(null);
+            lblCaratula.setText("Error Portada");
+        }
+    }
+    
+    // Este método busca la canción en la tabla y la resalta automáticamente
+    public void resaltarFilaEnTabla(Cancion cancionActual) {
+        
+        // ¡AQUÍ ESTÁ EL CAMBIO! Usamos el Getter que acabamos de crear
+        javax.swing.JTable tabla = vistaBiblioteca.getTablaBiblioteca(); 
+        
+        for (int i = 0; i < tabla.getRowCount(); i++) {
+            String tituloFila = tabla.getValueAt(i, 1).toString();
+            if (tituloFila.equals(cancionActual.getTitulo())) {
+                tabla.setRowSelectionInterval(i, i);
+                break;
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -580,7 +719,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnArbolABB;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBliblioteca;
-    private javax.swing.JToggleButton btnBucle;
     private javax.swing.JButton btnColaReproduccion;
     private javax.swing.JButton btnEncriptacion;
     private javax.swing.JButton btnEstadistica;
@@ -602,6 +740,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlDatos;
     private javax.swing.JSlider sldTime;
     private javax.swing.JSlider sldVolumen;
+    private javax.swing.JToggleButton tbtnBucle;
     private javax.swing.JToggleButton tbtnLike;
     private javax.swing.JToggleButton tbtnShuffle;
     private javax.swing.JTextField txtBuscar;

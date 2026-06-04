@@ -12,6 +12,7 @@ public class GestorReproductor {
     public ArbolABB arbolABB;
     public ArbolAVL arbolAVL;
     public TablaHash tablaHash;
+    public ListaDobleCircular listaReproduccion = new ListaDobleCircular();
 
     public GestorReproductor() {
         arbolABB = new ArbolABB();

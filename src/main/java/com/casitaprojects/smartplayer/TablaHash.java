@@ -40,17 +40,23 @@ public class TablaHash {
         hashPorGenero.get(genero).add(cancion);
     }
 
-    // Método de búsqueda universal (Busca en las 3 tablas)
-    public List<Cancion> buscar(String termino) {
+        // Método de búsqueda PARCIAL Y UNIVERSAL (Busca en las 3 tablas)
+        public List<Cancion> buscar(String termino) {
         termino = termino.toLowerCase().trim();
         List<Cancion> resultados = new ArrayList<>();
 
-        // Si encuentra coincidencias, las agrega a la lista de resultados
-        if (hashPorTitulo.containsKey(termino)) resultados.addAll(hashPorTitulo.get(termino));
-        if (hashPorArtista.containsKey(termino)) resultados.addAll(hashPorArtista.get(termino));
-        if (hashPorGenero.containsKey(termino)) resultados.addAll(hashPorGenero.get(termino));
+        // Iteramos buscando coincidencias PARCIALES en lugar de exactas
+        for (String key : hashPorTitulo.keySet()) {
+            if (key.contains(termino)) resultados.addAll(hashPorTitulo.get(key));
+        }
+        for (String key : hashPorArtista.keySet()) {
+            if (key.contains(termino)) resultados.addAll(hashPorArtista.get(key));
+        }
+        for (String key : hashPorGenero.keySet()) {
+            if (key.contains(termino)) resultados.addAll(hashPorGenero.get(key));
+        }
 
-        // Para evitar duplicados si buscas algo que es título y artista a la vez (ej. "Queen")
-        return resultados.stream().distinct().toList(); 
+        // Eliminamos duplicados y retornamos
+        return resultados.stream().distinct().toList();
     }    
 }

@@ -4,16 +4,21 @@
  */
 package com.casitaprojects.smartplayer;
 
-import java.io.FileInputStream;
-import javazoom.jl.player.Player;
-/**
- *
- * @author gezer
- */
-public class MotorReproductor {
-private static MotorReproductor instancia;
+    import java.io.FileInputStream;
+    import javazoom.jl.player.Player;
+    /**
+     *
+     * @author gezer
+     */
+    public class MotorReproductor {
+        
+    private static MotorReproductor instancia;
     private Player playerActual;
     private Thread hiloReproduccion;
+    
+    // Variables para controlar la pausa
+    private boolean pausado = false;
+    private final Object lock = new Object(); // Nuestro "candado"
 
     private MotorReproductor() { }
 
@@ -26,13 +31,23 @@ private static MotorReproductor instancia;
 
     public void reproducirCancion(String rutaArchivo) {
         detenerCancion(); 
+        pausado = false; // Nos aseguramos que empiece sonando
+        
         try {
             FileInputStream fis = new FileInputStream(rutaArchivo);
             playerActual = new Player(fis);
             
             hiloReproduccion = new Thread(() -> {
                 try {
-                    playerActual.play();
+                    // El truco maestro: reproducimos frame por frame (1)
+                    while (playerActual != null && playerActual.play(1)) {
+                        if (pausado) {
+                            synchronized (lock) {
+                                lock.wait(); // Congelamos el tiempo aquí
+                            }
+                        }
+                    }
+                    // Si sale del while, la canción terminó (Pronto haremos que salte a la siguiente sola)
                 } catch (Exception e) {
                     System.out.println("Error en reproducción: " + e.getMessage());
                 }
@@ -42,6 +57,21 @@ private static MotorReproductor instancia;
         } catch (Exception e) {
             System.out.println("No se pudo cargar: " + e.getMessage());
         }
+    }
+
+    public void pausar() {
+        pausado = true;
+    }
+
+    public void reanudar() {
+        pausado = false;
+        synchronized (lock) {
+            lock.notify(); // Despertamos el hilo congelado
+        }
+    }
+
+    public boolean estaPausado() {
+        return pausado;
     }
 
     public void detenerCancion() {
