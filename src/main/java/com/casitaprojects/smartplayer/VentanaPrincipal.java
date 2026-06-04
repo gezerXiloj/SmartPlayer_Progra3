@@ -19,9 +19,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         initComponents();
         // 1. Instanciamos tu nuevo JPanel Form
         panelBiblioteca vistaBiblioteca = new panelBiblioteca();
+        panelPlaylist vistaPlaylist = new panelPlaylist();
         
         // 2. Lo agregamos a tu PanelCentral y le ponemos un "Apodo"
         pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
+        pnlCentral.add(vistaPlaylist, "CARTA_PLAYLIST");
     }
 
     /**
@@ -86,6 +88,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnPlaylist.setContentAreaFilled(false);
         btnPlaylist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPlaylist.setFocusPainted(false);
+        btnPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaylistActionPerformed(evt);
+            }
+        });
 
         btnArbolABB.setText("ARBOL ABB");
         btnArbolABB.setBorderPainted(false);
@@ -103,30 +110,55 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnAVL.setContentAreaFilled(false);
         btnAVL.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAVL.setFocusPainted(false);
+        btnAVL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAVLActionPerformed(evt);
+            }
+        });
 
         btnEstadistica.setText("ESTADISTICA");
         btnEstadistica.setBorderPainted(false);
         btnEstadistica.setContentAreaFilled(false);
         btnEstadistica.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEstadistica.setFocusPainted(false);
+        btnEstadistica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstadisticaActionPerformed(evt);
+            }
+        });
 
         btnHistorial.setText("HISTORIAL");
         btnHistorial.setBorderPainted(false);
         btnHistorial.setContentAreaFilled(false);
         btnHistorial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHistorial.setFocusPainted(false);
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
 
         btnColaReproduccion.setText("EN COLA");
         btnColaReproduccion.setBorderPainted(false);
         btnColaReproduccion.setContentAreaFilled(false);
         btnColaReproduccion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnColaReproduccion.setFocusPainted(false);
+        btnColaReproduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColaReproduccionActionPerformed(evt);
+            }
+        });
 
         btnEncriptacion.setText("ENCRIPTACION");
         btnEncriptacion.setBorderPainted(false);
         btnEncriptacion.setContentAreaFilled(false);
         btnEncriptacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEncriptacion.setFocusPainted(false);
+        btnEncriptacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEncriptacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout SideBarLayout = new javax.swing.GroupLayout(SideBar);
         SideBar.setLayout(SideBarLayout);
@@ -280,15 +312,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(sldTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PlayerInferiorLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PlayerInferiorLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))
-                    .addGroup(PlayerInferiorLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(37, 37, 37))))
         );
         PlayerInferiorLayout.setVerticalGroup(
             PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,7 +376,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
-            .addComponent(PlayerInferior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(PlayerInferior, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -368,8 +402,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArbolABBActionPerformed
 
     private void btnBlibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBlibliotecaActionPerformed
-       java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
-        
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
         // Mostramos la carta usando el "Apodo" que le pusimos arriba
         layout.show(pnlCentral, "CARTA_BIBLIOTECA");
     }//GEN-LAST:event_btnBlibliotecaActionPerformed
@@ -377,6 +410,32 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnImportarActionPerformed
+
+    private void btnPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaylistActionPerformed
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        // Aquí llamamos a la carta de la playlist usando el apodo exacto
+        layout.show(pnlCentral, "CARTA_PLAYLIST");
+    }//GEN-LAST:event_btnPlaylistActionPerformed
+
+    private void btnAVLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAVLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAVLActionPerformed
+
+    private void btnEstadisticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEstadisticaActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnColaReproduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColaReproduccionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnColaReproduccionActionPerformed
+
+    private void btnEncriptacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncriptacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEncriptacionActionPerformed
 
     /**
      * @param args the command line arguments

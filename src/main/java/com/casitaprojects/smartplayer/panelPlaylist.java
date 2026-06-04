@@ -33,12 +33,19 @@ public class panelPlaylist extends javax.swing.JPanel {
         itemEliminar = new javax.swing.JMenuItem();
         pnlDerecho = new javax.swing.JPanel();
         pnlIzquierdo = new javax.swing.JPanel();
+        pnlCabeceraPlay = new javax.swing.JPanel();
+        lblMisPlaylist = new javax.swing.JLabel();
+        btnMas = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        pnlMisPlaylis = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblPortada = new javax.swing.JLabel();
         lblNombPlay = new javax.swing.JLabel();
         lblCantidadTime = new javax.swing.JLabel();
         btnPlayLista = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPlaylist = new javax.swing.JTable();
 
         itemRenombrar.setText("RENOMBRAR");
         menuOpciones.add(itemRenombrar);
@@ -60,18 +67,67 @@ public class panelPlaylist extends javax.swing.JPanel {
         );
         pnlDerechoLayout.setVerticalGroup(
             pnlDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        lblMisPlaylist.setText("MIS PLAYLIST");
+
+        btnMas.setText("+");
+        btnMas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMasActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlCabeceraPlayLayout = new javax.swing.GroupLayout(pnlCabeceraPlay);
+        pnlCabeceraPlay.setLayout(pnlCabeceraPlayLayout);
+        pnlCabeceraPlayLayout.setHorizontalGroup(
+            pnlCabeceraPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCabeceraPlayLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblMisPlaylist)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+        pnlCabeceraPlayLayout.setVerticalGroup(
+            pnlCabeceraPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCabeceraPlayLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlCabeceraPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMisPlaylist)
+                    .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnlMisPlaylisLayout = new javax.swing.GroupLayout(pnlMisPlaylis);
+        pnlMisPlaylis.setLayout(pnlMisPlaylisLayout);
+        pnlMisPlaylisLayout.setHorizontalGroup(
+            pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 189, Short.MAX_VALUE)
+        );
+        pnlMisPlaylisLayout.setVerticalGroup(
+            pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 306, Short.MAX_VALUE)
+        );
+
+        jScrollPane3.setViewportView(pnlMisPlaylis);
 
         javax.swing.GroupLayout pnlIzquierdoLayout = new javax.swing.GroupLayout(pnlIzquierdo);
         pnlIzquierdo.setLayout(pnlIzquierdoLayout);
         pnlIzquierdoLayout.setHorizontalGroup(
             pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 224, Short.MAX_VALUE)
+            .addComponent(pnlCabeceraPlay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlIzquierdoLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         pnlIzquierdoLayout.setVerticalGroup(
             pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(pnlIzquierdoLayout.createSequentialGroup()
+                .addComponent(pnlCabeceraPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         lblPortada.setText("PORTADA");
@@ -126,6 +182,24 @@ public class panelPlaylist extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        tblPlaylist.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No.", "TITULO", "ARTISTA", "ALBUM", "GENERO", "DURACION", "AÑO"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblPlaylist);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,7 +209,11 @@ public class panelPlaylist extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlDerecho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addComponent(jScrollPane1)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,7 +221,8 @@ public class panelPlaylist extends javax.swing.JPanel {
             .addComponent(pnlDerecho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -151,20 +230,32 @@ public class panelPlaylist extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
 
+    private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMas;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnPlayLista;
     private javax.swing.JMenuItem itemEliminar;
     private javax.swing.JMenuItem itemEncriptar;
     private javax.swing.JMenuItem itemExportar;
     private javax.swing.JMenuItem itemRenombrar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCantidadTime;
+    private javax.swing.JLabel lblMisPlaylist;
     private javax.swing.JLabel lblNombPlay;
     private javax.swing.JLabel lblPortada;
     private javax.swing.JPopupMenu menuOpciones;
     private javax.swing.JPanel pnlCabecera;
+    private javax.swing.JPanel pnlCabeceraPlay;
     private javax.swing.JPanel pnlDerecho;
     private javax.swing.JPanel pnlIzquierdo;
+    private javax.swing.JPanel pnlMisPlaylis;
+    private javax.swing.JTable tblPlaylist;
     // End of variables declaration//GEN-END:variables
 }
