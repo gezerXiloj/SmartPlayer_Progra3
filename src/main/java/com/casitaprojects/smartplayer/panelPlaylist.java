@@ -137,6 +137,11 @@ public class panelPlaylist extends javax.swing.JPanel {
         lblCantidadTime.setText("42 canciones • 2h 48m");
 
         btnPlayLista.setText("PLAY LISTA");
+        btnPlayLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayListaActionPerformed(evt);
+            }
+        });
 
         btnMenu.setText("⋮");
         btnMenu.setBorderPainted(false);
@@ -233,6 +238,10 @@ public class panelPlaylist extends javax.swing.JPanel {
     private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMasActionPerformed
+
+    private void btnPlayListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayListaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPlayListaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

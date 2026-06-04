@@ -3,7 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.casitaprojects.smartplayer;
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 /**
  *
  * @author gezer
@@ -12,20 +20,58 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
-    /**
-     * Creates new form VentanaPrincipal
-     */
+        // --- VARIABLES GLOBALES DEL REPRODUCTOR ---
+        GestorReproductor gestor = new GestorReproductor();
+        ArrayList<Cancion> listaTemporal = new ArrayList<>(); // Guarda todo lo importado
+
+        // Sacamos los paneles aquí afuera para poder usarlos en los botones
+        panelBiblioteca vistaBiblioteca;
+        panelPlaylist vistaPlaylist;
+    
+    
     public VentanaPrincipal() {
         initComponents();
-        // 1. Instanciamos tu nuevo JPanel Form
-        panelBiblioteca vistaBiblioteca = new panelBiblioteca();
-        panelPlaylist vistaPlaylist = new panelPlaylist();
         
-        // 2. Lo agregamos a tu PanelCentral y le ponemos un "Apodo"
+        // Inicializamos los paneles
+        vistaBiblioteca = new panelBiblioteca();
+        vistaPlaylist = new panelPlaylist();
+        
         pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
         pnlCentral.add(vistaPlaylist, "CARTA_PLAYLIST");
     }
-
+    
+    // --- METODO RECURSIVO ---
+    private void buscarCancionesRecursivo(File carpeta) {
+        File[] archivos = carpeta.listFiles();
+        if (archivos != null) {
+            for (File archivo : archivos) {
+                if (archivo.isDirectory()) {
+                    buscarCancionesRecursivo(archivo); 
+                } else if (archivo.getName().toLowerCase().endsWith(".mp3")) {
+                    try {
+                        AudioFile audioFile = AudioFileIO.read(archivo);
+                        Tag tag = audioFile.getTag();
+                        AudioHeader header = audioFile.getAudioHeader();
+                        
+                        String titulo = tag != null && tag.getFirst(FieldKey.TITLE) != null && !tag.getFirst(FieldKey.TITLE).isEmpty() ? tag.getFirst(FieldKey.TITLE) : archivo.getName().replace(".mp3", "");
+                        String artista = tag != null && tag.getFirst(FieldKey.ARTIST) != null && !tag.getFirst(FieldKey.ARTIST).isEmpty() ? tag.getFirst(FieldKey.ARTIST) : "Desconocido";
+                        String album = tag != null && tag.getFirst(FieldKey.ALBUM) != null && !tag.getFirst(FieldKey.ALBUM).isEmpty() ? tag.getFirst(FieldKey.ALBUM) : "Desconocido";
+                        String genero = tag != null && tag.getFirst(FieldKey.GENRE) != null && !tag.getFirst(FieldKey.GENRE).isEmpty() ? tag.getFirst(FieldKey.GENRE) : "Desconocido";
+                        String anio = tag != null && tag.getFirst(FieldKey.YEAR) != null && !tag.getFirst(FieldKey.YEAR).isEmpty() ? tag.getFirst(FieldKey.YEAR) : "Desconocido";
+                        
+                        int duracionSegundos = header.getTrackLength();
+                        String duracionStr = String.format("%02d:%02d", duracionSegundos / 60, duracionSegundos % 60);
+                        
+                        Cancion nuevaCancion = new Cancion(titulo, artista, album, genero, duracionStr, archivo.length(), archivo.getAbsolutePath(), anio);
+                        listaTemporal.add(nuevaCancion); 
+                        
+                    } catch (Exception e) {
+                        System.out.println("Error metadatos en: " + archivo.getName());
+                    }
+                }
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -212,6 +258,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtBuscar.setForeground(new java.awt.Color(255, 255, 255));
         txtBuscar.setText("Buscar canciones, artistas, álbumes...");
         txtBuscar.setBorder(null);
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
 
         btnImportar.setText("IMPORTAR CARPETA");
         btnImportar.setBorderPainted(false);
@@ -408,7 +459,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBlibliotecaActionPerformed
 
     private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
-        // TODO add your handling code here:
+        javax.swing.JFileChooser explorador = new javax.swing.JFileChooser();
+        explorador.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        
+        int seleccion = explorador.showOpenDialog(this);
+        if (seleccion == javax.swing.JFileChooser.APPROVE_OPTION) {
+            File carpetaSeleccionada = explorador.getSelectedFile();
+            
+            listaTemporal.clear(); // Limpiar lecturas anteriores
+            buscarCancionesRecursivo(carpetaSeleccionada); // Leer MP3s
+            
+            // Llenar estructuras y medir
+            long inicioABB = System.nanoTime();
+            for (Cancion c : listaTemporal) { gestor.arbolABB.insertar(c); }
+            long tiempoABB = System.nanoTime() - inicioABB;
+            
+            long inicioAVL = System.nanoTime();
+            for (Cancion c : listaTemporal) { gestor.arbolAVL.insertar(c); }
+            long tiempoAVL = System.nanoTime() - inicioAVL;
+
+            long inicioHash = System.nanoTime();
+            for (Cancion c : listaTemporal) { gestor.tablaHash.insertar(c); }
+            long tiempoHash = System.nanoTime() - inicioHash;
+            
+            // --- ACTUALIZAMOS LA TABLA VISUAL ---
+            vistaBiblioteca.actualizarTabla(listaTemporal);
+            
+            String mensaje = "¡Carga Completada!\n\n"
+                           + "Canciones importadas: " + listaTemporal.size() + "\n\n"
+                           + "⏱️ Tiempos de Inserción:\n"
+                           + "Árbol ABB: " + tiempoABB + " ns\n"
+                           + "Árbol AVL: " + tiempoAVL + " ns\n"
+                           + "Tabla Hash: " + tiempoHash + " ns\n\n"
+                           + (tiempoAVL > tiempoABB ? "(El AVL tardó más por las rotaciones)" : "");
+                           
+            JOptionPane.showMessageDialog(this, mensaje, "Análisis de Estructuras", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnImportarActionPerformed
 
     private void btnPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaylistActionPerformed
@@ -436,6 +522,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void btnEncriptacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncriptacionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEncriptacionActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        String textoBusqueda = txtBuscar.getText().trim();
+        
+        // Si borra el texto y da Enter, le mostramos toda la biblioteca de nuevo
+        if (textoBusqueda.isEmpty() || textoBusqueda.equals("Buscar canciones, artistas, álbumes...")) {
+            vistaBiblioteca.actualizarTabla(listaTemporal);
+            return;
+        }
+
+        // Buscar en la Tabla Hash
+        List<Cancion> resultados = gestor.tablaHash.buscar(textoBusqueda);
+
+        if (resultados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontró ninguna canción para: " + textoBusqueda, "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        } else {
+            // Actualizar la tabla solo con las canciones encontradas
+            vistaBiblioteca.actualizarTabla(resultados);
+            
+            // Forzar a que la pantalla se pase a la biblioteca para ver los resultados
+            java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+            layout.show(pnlCentral, "CARTA_BIBLIOTECA");
+        }
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments

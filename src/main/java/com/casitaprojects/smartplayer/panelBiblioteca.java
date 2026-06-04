@@ -27,11 +27,11 @@ public class panelBiblioteca extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblBiblioteca = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblBiblioteca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -47,16 +47,21 @@ public class panelBiblioteca extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(40);
-            jTable1.getColumnModel().getColumn(6).setResizable(false);
+        jScrollPane1.setViewportView(tblBiblioteca);
+        if (tblBiblioteca.getColumnModel().getColumnCount() > 0) {
+            tblBiblioteca.getColumnModel().getColumn(0).setResizable(false);
+            tblBiblioteca.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tblBiblioteca.getColumnModel().getColumn(6).setResizable(false);
         }
 
         jLabel1.setText("BIBLIOTECA");
 
         btnAgregar.setText("+ Playlist");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -86,11 +91,33 @@ public class panelBiblioteca extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    // --- METODO NUEVO PARA LLENAR LA TABLA ---
+    public void actualizarTabla(java.util.List<Cancion> canciones) {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblBiblioteca.getModel();
+        modelo.setRowCount(0); // Borra los datos anteriores para no duplicar
+
+        int contador = 1;
+        for (Cancion c : canciones) {
+            modelo.addRow(new Object[]{
+                contador++, 
+                c.getTitulo(), 
+                c.getArtista(), 
+                c.getAlbum(), 
+                c.getGenero(), 
+                c.getDuracion(), 
+                c.getAnio()
+            });
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblBiblioteca;
     // End of variables declaration//GEN-END:variables
 }
