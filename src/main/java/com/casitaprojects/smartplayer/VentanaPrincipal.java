@@ -27,6 +27,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // Sacamos los paneles aquí afuera para poder usarlos en los botones
         panelBiblioteca vistaBiblioteca;
         panelPlaylist vistaPlaylist;
+        // El "portapapeles" para llevar la canción de una pantalla a otra
+        public Cancion cancionPendiente = null;
     
     
     public VentanaPrincipal() {
@@ -616,13 +618,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        // Le pasamos el estado del botón Shuffle (true o false)
-        Cancion siguiente = gestor.listaReproduccion.obtenerSiguiente(tbtnShuffle.isSelected());
-        
-        if (siguiente != null) {
-            reproducirDesdeBiblioteca(siguiente);
-            resaltarFilaEnTabla(siguiente); // Para que se mueva la selección visual
+        // 1. Validamos si el Bucle está activado
+        if (tbtnBucle.isSelected()) {
+            Cancion actual = gestor.listaReproduccion.getCancionActual();
+            if (actual != null) {
+                reproducirDesdeBiblioteca(actual);
+            }
+        } else {
+            // 2. Si no hay Bucle, avanzamos normal (con o sin Shuffle)
+            Cancion siguiente = gestor.listaReproduccion.obtenerSiguiente(tbtnShuffle.isSelected());
+            if (siguiente != null) {
+                reproducirDesdeBiblioteca(siguiente);
+                resaltarFilaEnTabla(siguiente); // Movemos la rayita azul
     }//GEN-LAST:event_btnNextActionPerformed
+        }
     }
     
     private void tbtnShuffleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnShuffleActionPerformed
@@ -656,35 +665,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // --- METODO PARA REPRODUCIR Y ACTUALIZAR UI ---
     public void reproducirDesdeBiblioteca(Cancion cancion) {
         
-        // 1. Encendemos la música
-        MotorReproductor.getInstancia().reproducirCancion(cancion.getRutaArchivo());
+        // 1. Encendemos la música y configuramos la acción automática al terminar
+        MotorReproductor motor = MotorReproductor.getInstancia();
+        motor.reproducirCancion(cancion.getRutaArchivo());
+        
+        // El motor nos avisará cuando la canción finalice para darle clic al botón Next
+        motor.setAccionAlTerminar(() -> {
+            btnNext.doClick(); // ¡Simula el clic físico del usuario!
+        });
         
         // 2. Actualizamos los textos del panel inferior
         lblTitulo.setText(cancion.getTitulo());
         lblArtista.setText(cancion.getArtista());
         lblAlbum.setText(cancion.getAlbum());
         lblDuracion.setText(cancion.getDuracion());
-        lblTime.setText("00:00"); // Reiniciamos el contador
+        lblTime.setText("00:00"); // Reiniciamos el contador visual
         
-        // Cambiamos el texto del botón Play para que diga PAUSE o cambie de icono
+        // Cambiamos el texto del botón Play para indicar que está sonando
         btnPlay.setText("||"); 
         
-        // 3. Extraemos la carátula
+        // 3. Extraemos la carátula real del archivo MP3
         try {
             AudioFile audioFile = AudioFileIO.read(new File(cancion.getRutaArchivo()));
             Tag tag = audioFile.getTag();
             
             if (tag != null && tag.getFirstArtwork() != null) {
-                // Si tiene foto, la convertimos a imagen
+                // Si tiene foto, la convertimos a bytes e imagen
                 byte[] imageData = tag.getFirstArtwork().getBinaryData();
                 javax.swing.ImageIcon icon = new javax.swing.ImageIcon(imageData);
-                // La redimensionamos al tamaño de tu lblCaratula
+                
+                // La redimensionamos al tamaño exacto de tu lblCaratula
                 java.awt.Image img = icon.getImage().getScaledInstance(lblCaratula.getWidth(), lblCaratula.getHeight(), java.awt.Image.SCALE_SMOOTH);
                 
                 lblCaratula.setIcon(new javax.swing.ImageIcon(img));
-                lblCaratula.setText(""); // Borramos el texto
+                lblCaratula.setText(""); // Limpiamos el texto por defecto
             } else {
-                // Si no tiene foto, la dejamos limpia (luego le puedes poner una de disco por defecto)
+                // Si no tiene foto, la dejamos limpia con un texto alternativo
                 lblCaratula.setIcon(null);
                 lblCaratula.setText("Sin Portada");
             }
@@ -696,17 +712,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     // Este método busca la canción en la tabla y la resalta automáticamente
     public void resaltarFilaEnTabla(Cancion cancionActual) {
-        
-        // ¡AQUÍ ESTÁ EL CAMBIO! Usamos el Getter que acabamos de crear
-        javax.swing.JTable tabla = vistaBiblioteca.getTablaBiblioteca(); 
-        
-        for (int i = 0; i < tabla.getRowCount(); i++) {
-            String tituloFila = tabla.getValueAt(i, 1).toString();
-            if (tituloFila.equals(cancionActual.getTitulo())) {
-                tabla.setRowSelectionInterval(i, i);
+        // 1. Buscamos en la Biblioteca
+        javax.swing.JTable tablaBiblio = vistaBiblioteca.getTablaBiblioteca(); 
+        for (int i = 0; i < tablaBiblio.getRowCount(); i++) {
+            if (tablaBiblio.getValueAt(i, 1).toString().equals(cancionActual.getTitulo())) {
+                tablaBiblio.setRowSelectionInterval(i, i);
                 break;
             }
         }
+        
+        // 2. Buscamos en la Playlist (si hay una abierta)
+        javax.swing.JTable tablaPlay = vistaPlaylist.getTablaPlaylist();
+        if (tablaPlay != null && tablaPlay.getRowCount() > 0) {
+            for (int i = 0; i < tablaPlay.getRowCount(); i++) {
+                if (tablaPlay.getValueAt(i, 1).toString().equals(cancionActual.getTitulo())) {
+                    tablaPlay.setRowSelectionInterval(i, i);
+                    break;
+                }
+            }
+        }
+    }
+    public void irPantallaPlaylist() {
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        layout.show(pnlCentral, "CARTA_PLAYLIST");
+        // Le avisamos al panel de playlists que actualice sus botones
+        vistaPlaylist.actualizarListaPlaylists(); 
     }
     /**
      * @param args the command line arguments

@@ -101,27 +101,25 @@ public class panelBiblioteca extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // 1. Le pedimos al usuario el nombre de la nueva Playlist
-        String nombrePlaylist = javax.swing.JOptionPane.showInputDialog(this, 
-                "Ingresa el nombre de la nueva Playlist:", 
-                "Nueva Playlist", 
-                javax.swing.JOptionPane.PLAIN_MESSAGE);
+        int filaSeleccionada = tblBiblioteca.getSelectedRow();
         
-        // 2. Validamos que no esté vacío
-        if (nombrePlaylist != null && !nombrePlaylist.trim().isEmpty()) {
+        if (filaSeleccionada != -1 && listaActual != null) {
+            // 1. Agarramos la canción seleccionada
+            Cancion seleccionada = listaActual.get(filaSeleccionada);
             
-            // 3. Creamos la Playlist y la guardamos en el Gestor
-            Playlist nuevaPlaylist = new Playlist(nombrePlaylist.trim());
-            
+            // 2. Se la damos al "Mensajero" (VentanaPrincipal)
             VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
-            ventana.gestor.misPlaylists.add(nuevaPlaylist);
+            ventana.cancionPendiente = seleccionada;
+            
+            // 3. Nos vamos a la pantalla de Playlists
+            ventana.irPantallaPlaylist();
             
             javax.swing.JOptionPane.showMessageDialog(this, 
-                    "¡Playlist '" + nuevaPlaylist.getNombre() + "' creada con éxito!", 
-                    "Éxito", 
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            
-            // TODO: Más adelante aquí actualizaremos el panel visual para que aparezca el botoncito
+                "Selecciona una Playlist a la izquierda o crea una nueva (+) para agregar:\n🎵 " + seleccionada.getTitulo(), 
+                "Agregar a Playlist", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Primero selecciona una canción de la tabla dándole un clic.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 

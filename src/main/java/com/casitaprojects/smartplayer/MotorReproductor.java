@@ -18,7 +18,10 @@ package com.casitaprojects.smartplayer;
     
     // Variables para controlar la pausa
     private boolean pausado = false;
-    private final Object lock = new Object(); // Nuestro "candado"
+    private final Object lock = new Object(); 
+    
+    // --- NUEVO: Guardará la instrucción de qué hacer al terminar ---
+    private Runnable accionAlTerminar;
 
     private MotorReproductor() { }
 
@@ -29,9 +32,14 @@ package com.casitaprojects.smartplayer;
         return instancia;
     }
 
+    // --- NUEVO: Método para recibir la instrucción ---
+    public void setAccionAlTerminar(Runnable accion) {
+        this.accionAlTerminar = accion;
+    }
+
     public void reproducirCancion(String rutaArchivo) {
         detenerCancion(); 
-        pausado = false; // Nos aseguramos que empiece sonando
+        pausado = false; 
         
         try {
             FileInputStream fis = new FileInputStream(rutaArchivo);
@@ -39,40 +47,39 @@ package com.casitaprojects.smartplayer;
             
             hiloReproduccion = new Thread(() -> {
                 try {
-                    // El truco maestro: reproducimos frame por frame (1)
+                    // Reproducimos frame por frame
                     while (playerActual != null && playerActual.play(1)) {
                         if (pausado) {
                             synchronized (lock) {
-                                lock.wait(); // Congelamos el tiempo aquí
+                                lock.wait(); 
                             }
                         }
                     }
-                    // Si sale del while, la canción terminó (Pronto haremos que salte a la siguiente sola)
+                    
+                    // --- NUEVO: Magia de Autoplay ---
+                    // Si la canción termina solita, ejecutamos el "Next" automático
+                    if (playerActual != null && accionAlTerminar != null) {
+                        javax.swing.SwingUtilities.invokeLater(accionAlTerminar);
+                    }
+                    
                 } catch (Exception e) {
                     System.out.println("Error en reproducción: " + e.getMessage());
                 }
             });
             hiloReproduccion.start();
-            System.out.println("🎵 Reproduciendo: " + rutaArchivo);
         } catch (Exception e) {
             System.out.println("No se pudo cargar: " + e.getMessage());
         }
     }
 
-    public void pausar() {
-        pausado = true;
-    }
+    public void pausar() { pausado = true; }
 
     public void reanudar() {
         pausado = false;
-        synchronized (lock) {
-            lock.notify(); // Despertamos el hilo congelado
-        }
+        synchronized (lock) { lock.notify(); }
     }
 
-    public boolean estaPausado() {
-        return pausado;
-    }
+    public boolean estaPausado() { return pausado; }
 
     public void detenerCancion() {
         if (playerActual != null) {

@@ -3,39 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.casitaprojects.smartplayer;
-
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author gezer
  */
 public class Playlist {
-    
-    private String nombre;
-    private ListaDobleCircular canciones; // Cada playlist tiene su propia cola de reproducción
+ private String nombre;
+    private List<Cancion> canciones;
 
     public Playlist(String nombre) {
         this.nombre = nombre;
-        this.canciones = new ListaDobleCircular(); 
+        this.canciones = new ArrayList<>();
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public List<Cancion> getCanciones() { return canciones; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public ListaDobleCircular getCanciones() {
-        return canciones;
-    }
-    
-    // Método para agregar una canción a esta playlist específica
     public void agregarCancion(Cancion cancion) {
-        // Aprovechamos el método que ya tienes, enviando una lista de 1 elemento
-        java.util.List<Cancion> unicaCancion = new java.util.ArrayList<>();
-        unicaCancion.add(cancion);
-        this.canciones.cargarLista(unicaCancion, cancion);
+        // Validamos que no agregue la misma canción dos veces a la misma lista
+        if (!canciones.contains(cancion)) {
+            canciones.add(cancion);
     }
-    
+    }
 }
