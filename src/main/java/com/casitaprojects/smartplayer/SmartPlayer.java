@@ -5,6 +5,7 @@
 package com.casitaprojects.smartplayer;
 
 import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 /**
  *
@@ -13,13 +14,15 @@ import javax.swing.UIManager;
 public class SmartPlayer {
 
     public static void main(String[] args) {
-        /* 1. Obligamos a Java a usar el diseño moderno de Windows */
+        /* 1. Obligamos a Java a usar el diseño Oscuro y Elegante (FlatLaf) */
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
             System.out.println("Error al cargar el tema visual: " + ex.getMessage());
         }
-            VentanaPrincipal verSmart=new VentanaPrincipal();
-            verSmart.setVisible(true);
+        
+        /* 2. Arrancamos la ventana principal */
+        VentanaPrincipal verSmart = new VentanaPrincipal();
+        verSmart.setVisible(true);
     }
 }

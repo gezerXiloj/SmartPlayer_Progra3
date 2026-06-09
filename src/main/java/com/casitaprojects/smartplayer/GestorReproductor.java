@@ -13,11 +13,14 @@ public class GestorReproductor {
     public ArbolAVL arbolAVL;
     public TablaHash tablaHash;
     public ListaDobleCircular listaReproduccion = new ListaDobleCircular();
+    
+    public java.util.List<Playlist> misPlaylists;
 
     public GestorReproductor() {
         arbolABB = new ArbolABB();
         arbolAVL = new ArbolAVL();
         tablaHash = new TablaHash();
+        misPlaylists = new java.util.ArrayList<>();
     }
     
     // Método para medir el tiempo de búsqueda (Lo que pidió el Ingeniero)

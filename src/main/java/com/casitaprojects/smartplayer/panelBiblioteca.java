@@ -32,6 +32,9 @@ public class panelBiblioteca extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
 
+        setForeground(new java.awt.Color(0, 0, 0));
+
+        tblBiblioteca.setForeground(new java.awt.Color(255, 255, 255));
         tblBiblioteca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -98,7 +101,28 @@ public class panelBiblioteca extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        // 1. Le pedimos al usuario el nombre de la nueva Playlist
+        String nombrePlaylist = javax.swing.JOptionPane.showInputDialog(this, 
+                "Ingresa el nombre de la nueva Playlist:", 
+                "Nueva Playlist", 
+                javax.swing.JOptionPane.PLAIN_MESSAGE);
+        
+        // 2. Validamos que no esté vacío
+        if (nombrePlaylist != null && !nombrePlaylist.trim().isEmpty()) {
+            
+            // 3. Creamos la Playlist y la guardamos en el Gestor
+            Playlist nuevaPlaylist = new Playlist(nombrePlaylist.trim());
+            
+            VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+            ventana.gestor.misPlaylists.add(nuevaPlaylist);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "¡Playlist '" + nuevaPlaylist.getNombre() + "' creada con éxito!", 
+                    "Éxito", 
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            // TODO: Más adelante aquí actualizaremos el panel visual para que aparezca el botoncito
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void tblBibliotecaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBibliotecaMouseClicked

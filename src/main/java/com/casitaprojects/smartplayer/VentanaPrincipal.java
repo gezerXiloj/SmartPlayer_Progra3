@@ -115,7 +115,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pnlCentral = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 0));
 
+        btnBliblioteca.setBackground(new java.awt.Color(204, 204, 204));
+        btnBliblioteca.setForeground(new java.awt.Color(255, 255, 255));
         btnBliblioteca.setText("BIBLIOTECA");
         btnBliblioteca.setBorderPainted(false);
         btnBliblioteca.setContentAreaFilled(false);
@@ -127,8 +130,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        lblSmart.setForeground(new java.awt.Color(255, 255, 255));
         lblSmart.setText("SMART PLAYER");
 
+        btnPlaylist.setBackground(new java.awt.Color(204, 204, 204));
+        btnPlaylist.setForeground(new java.awt.Color(255, 255, 255));
         btnPlaylist.setText("PLAYLIST");
         btnPlaylist.setBorderPainted(false);
         btnPlaylist.setContentAreaFilled(false);
@@ -140,6 +146,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnArbolABB.setBackground(new java.awt.Color(204, 204, 204));
+        btnArbolABB.setForeground(new java.awt.Color(255, 255, 255));
         btnArbolABB.setText("ARBOL ABB");
         btnArbolABB.setBorderPainted(false);
         btnArbolABB.setContentAreaFilled(false);
@@ -151,6 +159,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnAVL.setBackground(new java.awt.Color(204, 204, 204));
+        btnAVL.setForeground(new java.awt.Color(255, 255, 255));
         btnAVL.setText("ARBOL AVL");
         btnAVL.setBorderPainted(false);
         btnAVL.setContentAreaFilled(false);
@@ -162,6 +172,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnEstadistica.setBackground(new java.awt.Color(204, 204, 204));
+        btnEstadistica.setForeground(new java.awt.Color(255, 255, 255));
         btnEstadistica.setText("ESTADISTICA");
         btnEstadistica.setBorderPainted(false);
         btnEstadistica.setContentAreaFilled(false);
@@ -173,6 +185,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnHistorial.setBackground(new java.awt.Color(204, 204, 204));
+        btnHistorial.setForeground(new java.awt.Color(255, 255, 255));
         btnHistorial.setText("HISTORIAL");
         btnHistorial.setBorderPainted(false);
         btnHistorial.setContentAreaFilled(false);
@@ -184,6 +198,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnColaReproduccion.setBackground(new java.awt.Color(204, 204, 204));
+        btnColaReproduccion.setForeground(new java.awt.Color(255, 255, 255));
         btnColaReproduccion.setText("EN COLA");
         btnColaReproduccion.setBorderPainted(false);
         btnColaReproduccion.setContentAreaFilled(false);
@@ -195,6 +211,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnEncriptacion.setBackground(new java.awt.Color(204, 204, 204));
+        btnEncriptacion.setForeground(new java.awt.Color(255, 255, 255));
         btnEncriptacion.setText("ENCRIPTACION");
         btnEncriptacion.setBorderPainted(false);
         btnEncriptacion.setContentAreaFilled(false);
@@ -252,10 +270,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         TopBar.setForeground(new java.awt.Color(51, 51, 51));
 
         lblLupa.setBackground(new java.awt.Color(51, 51, 51));
+        lblLupa.setForeground(new java.awt.Color(255, 255, 255));
         lblLupa.setText("Lupa");
 
         txtBuscar.setBackground(new java.awt.Color(51, 51, 51));
-        txtBuscar.setForeground(new java.awt.Color(255, 255, 255));
         txtBuscar.setText("Buscar canciones, artistas, álbumes...");
         txtBuscar.setBorder(null);
         txtBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -264,6 +282,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnImportar.setForeground(new java.awt.Color(255, 255, 255));
         btnImportar.setText("IMPORTAR CARPETA");
         btnImportar.setBorderPainted(false);
         btnImportar.setContentAreaFilled(false);
@@ -307,9 +326,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTitulo.setText("TITULO");
         pnlDatos.add(lblTitulo);
 
+        lblArtista.setForeground(new java.awt.Color(255, 255, 255));
         lblArtista.setText("Artista");
         pnlDatos.add(lblArtista);
 
+        lblAlbum.setForeground(new java.awt.Color(255, 255, 255));
         lblAlbum.setText("Album");
         pnlDatos.add(lblAlbum);
 
@@ -352,6 +373,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         lblVol.setText("jLabel4");
 
+        lblDuracion.setForeground(new java.awt.Color(255, 255, 255));
         lblDuracion.setText("00:00");
 
         lblTime.setText("00:00");
