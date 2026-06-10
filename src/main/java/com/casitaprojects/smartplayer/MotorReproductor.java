@@ -91,5 +91,41 @@ package com.casitaprojects.smartplayer;
             hiloReproduccion = null;
         }
     }
+    
+    // --- NUEVO: Método para adelantar o atrasar la canción ---
+    public void saltarAPunto(String rutaArchivo, int segundoDestino, int segundosTotales) {
+        detenerCancion(); 
+        pausado = false; 
+        
+        try {
+            java.io.File archivo = new java.io.File(rutaArchivo);
+            long totalBytes = archivo.length(); // Cuánto pesa el MP3
+            
+            // Regla de 3: Calculamos qué byte corresponde al segundo que elegiste
+            long bytesASaltar = (long) (((double) segundoDestino / segundosTotales) * totalBytes);
+            
+            java.io.FileInputStream fis = new java.io.FileInputStream(archivo);
+            fis.skip(bytesASaltar); // Nos saltamos esa parte del archivo
+            playerActual = new Player(fis);
+            
+            hiloReproduccion = new Thread(() -> {
+                try {
+                    while (playerActual != null && playerActual.play(1)) {
+                        if (pausado) {
+                            synchronized (lock) { lock.wait(); }
+                        }
+                    }
+                    if (playerActual != null && accionAlTerminar != null) {
+                        javax.swing.SwingUtilities.invokeLater(accionAlTerminar);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error en reproducción tras salto: " + e.getMessage());
+                }
+            });
+            hiloReproduccion.start();
+        } catch (Exception e) {
+            System.out.println("Error al saltar: " + e.getMessage());
+        }
+    }
 }    
 

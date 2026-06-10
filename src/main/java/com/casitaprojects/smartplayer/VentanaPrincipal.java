@@ -34,6 +34,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         private javax.swing.Timer timerReloj;
         private int segundosTranscurridos = 0;
         private int totalSegundosCancion = 0;
+        public boolean usuarioArrastrando = false; // <-- NUEVO: Para saber si tienes el mouse presionado
     
     
     public VentanaPrincipal() {
@@ -48,31 +49,71 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         // ¡ARRANCAMOS EL CEREBRO DEL RELOJ!
         configurarReloj();
+        configurarEventosSlider(); // <--- LLAMADA NUEVA AQUÍ
     }
     
     // --- METODO QUE MUEVE EL SLIDER DE TIEMPO ---
     private void configurarReloj() {
-        // Configuramos el timer para que "haga tictac" cada 1000 milisegundos (1 segundo)
+        if (timerReloj != null) { timerReloj.stop(); } // Evita crear dobles relojes
+        
         timerReloj = new javax.swing.Timer(1000, e -> {
             MotorReproductor motor = MotorReproductor.getInstancia();
             
-            // Si está pausado o no hay música, el reloj no avanza
-            if (motor.estaPausado() || gestor.listaReproduccion.getCancionActual() == null) {
+            // Si está pausado, no hay música, O ESTÁS ARRASTRANDO, el reloj no interfiere
+            if (motor.estaPausado() || gestor.listaReproduccion.getCancionActual() == null || usuarioArrastrando) {
                 return; 
             }
             
-            // Avanzamos 1 segundo
             segundosTranscurridos++;
-            sldTime.setValue(segundosTranscurridos); // Movemos la bolita del slider
+            sldTime.setValue(segundosTranscurridos); 
             
-            // Formateamos el texto para que se vea como reloj digital "MM:SS"
             int mins = segundosTranscurridos / 60;
             int segs = segundosTranscurridos % 60;
             lblTime.setText(String.format("%02d:%02d", mins, segs));
             
-            // Si el reloj llega al final, lo detenemos (el Autoplay hará el resto)
             if (segundosTranscurridos >= totalSegundosCancion) {
                 timerReloj.stop();
+            }
+        });
+    }
+    
+    // --- NUEVO: EVENTOS PARA ARRASTRAR EL SLIDER ---
+    private void configurarEventosSlider() {
+        // Evento 1: Mientras arrastras el mouse (Actualiza el tiempo en vivo)
+        sldTime.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                usuarioArrastrando = true;
+                int valorDinámico = sldTime.getValue();
+                
+                // Formateamos en vivo mientras arrastras
+                int mins = valorDinámico / 60;
+                int segs = valorDinámico % 60;
+                lblTime.setText(String.format("%02d:%02d", mins, segs));
+            }
+        });
+
+        // Evento 2: Cuando sueltas el click (Da el salto en la canción)
+        sldTime.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                usuarioArrastrando = true; // Avisamos que tocaste el slider
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                usuarioArrastrando = false; // Ya lo soltaste
+                
+                int nuevoSegundo = sldTime.getValue();
+                segundosTranscurridos = nuevoSegundo; // Sincronizamos el reloj interno
+                
+                Cancion actual = gestor.listaReproduccion.getCancionActual();
+                if (actual != null && totalSegundosCancion > 0) {
+                    // ¡EJECUTAMOS EL SALTO EN EL MOTOR!
+                    MotorReproductor.getInstancia().saltarAPunto(actual.getRutaArchivo(), nuevoSegundo, totalSegundosCancion);
+                    
+                    // Aseguramos que el botón Play vuelva a decir Pause
+                    btnPlay.setText("||");
+                    
+                    // Arrancamos el timer por si estaba apagado
+                    if (!timerReloj.isRunning()) { timerReloj.start(); }
+                }
             }
         });
     }
