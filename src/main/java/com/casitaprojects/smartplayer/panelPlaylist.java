@@ -304,6 +304,11 @@ public class panelPlaylist extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblPlaylist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPlaylistMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPlaylist);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -368,6 +373,10 @@ public class panelPlaylist extends javax.swing.JPanel {
     }//GEN-LAST:event_btnPlayListaActionPerformed
 
     private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
+       
+    }//GEN-LAST:event_jScrollPane1MouseClicked
+
+    private void tblPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlaylistMouseClicked
         if (evt.getClickCount() == 2) {
             int filaSeleccionada = tblPlaylist.getSelectedRow();
             
@@ -388,7 +397,7 @@ public class panelPlaylist extends javax.swing.JPanel {
                 ventana.resaltarFilaEnTabla(cancionClickeada);
             }
         }
-    }//GEN-LAST:event_jScrollPane1MouseClicked
+    }//GEN-LAST:event_tblPlaylistMouseClicked
 
     // --- GETTER PARA QUE VENTANA PRINCIPAL PUEDA VER ESTA TABLA ---
     public javax.swing.JTable getTablaPlaylist() {

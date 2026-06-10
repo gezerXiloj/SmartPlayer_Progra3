@@ -337,6 +337,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pnlDatos.add(lblAlbum);
 
         tbtnLike.setText("C");
+        tbtnLike.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbtnLikeMouseClicked(evt);
+            }
+        });
 
         tbtnShuffle.setText("S");
         tbtnShuffle.addActionListener(new java.awt.event.ActionListener() {
@@ -630,9 +635,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             if (siguiente != null) {
                 reproducirDesdeBiblioteca(siguiente);
                 resaltarFilaEnTabla(siguiente); // Movemos la rayita azul
-    }//GEN-LAST:event_btnNextActionPerformed
+            }                                       
         }
-    }
+    }//GEN-LAST:event_btnNextActionPerformed
+
     
     private void tbtnShuffleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnShuffleActionPerformed
         if (tbtnShuffle.isSelected()) {
@@ -661,6 +667,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             System.out.println("➡️ Modo Bucle: DESACTIVADO");
         }
     }//GEN-LAST:event_tbtnBucleActionPerformed
+
+    private void tbtnLikeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbtnLikeMouseClicked
+        // 1. Conseguimos la canción que está sonando actualmente
+        Cancion cancionActual = gestor.listaReproduccion.getCancionActual();
+        
+        if (cancionActual == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay ninguna canción en reproducción.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            tbtnLike.setSelected(false); // Revierte el estado del botón
+            return;
+        }
+        
+        // 2. Buscamos si ya existe la playlist de Favoritos
+        String nombreFavoritos = "Favoritos ❤️";
+        Playlist playlistFavs = gestor.buscarPlaylistPorNombre(nombreFavoritos);
+        
+        // 3. Si no existe, la creamos y la registramos de una vez
+        if (playlistFavs == null) {
+            playlistFavs = new Playlist(nombreFavoritos);
+            gestor.crearPlaylist(playlistFavs); // Se añade a tu Gestor de manera global
+            System.out.println("¡Playlist '" + nombreFavoritos + "' creada por primera vez!");
+        }
+        
+        // 4. Validamos que la canción no esté ya metida en favoritos (para no duplicarla en la lista)
+        if (playlistFavs.getCanciones().contains(cancionActual)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Esta canción ya está en tus Favoritos.", "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // 5. La agregamos con éxito
+            playlistFavs.agregarCancion(cancionActual);
+            
+            // 6. Refrescamos visualmente el panel de Playlists
+            if (vistaPlaylist != null) {
+                // NOTA: Ajusta este método al nombre exacto que tengas en tu panelPlaylist para redibujar las listas
+                vistaPlaylist.actualizarListaPlaylists(); 
+            }
+            
+            System.out.println("Añadida a favoritos: " + cancionActual.getTitulo());
+        }
+    }//GEN-LAST:event_tbtnLikeMouseClicked
 
     // --- METODO PARA REPRODUCIR Y ACTUALIZAR UI ---
     public void reproducirDesdeBiblioteca(Cancion cancion) {

@@ -34,4 +34,21 @@ public class GestorReproductor {
         long tiempoTardado = fin - inicio;
         System.out.println("Búsqueda completada en: " + tiempoTardado + " nanosegundos");
     }
+    
+    // CORREGIDO: Ahora busca sobre 'misPlaylists'
+    public Playlist buscarPlaylistPorNombre(String nombre) {
+        for (Playlist p : misPlaylists) { 
+            if (p.getNombre().equalsIgnoreCase(nombre)) {
+                return p; 
+            }
+        }
+        return null; 
+    }
+
+    // NUEVO: Método necesario para registrar las nuevas playlists creadas
+    public void crearPlaylist(Playlist nueva) {
+        if (nueva != null) {
+            misPlaylists.add(nueva);
+        }
+    }
 }
