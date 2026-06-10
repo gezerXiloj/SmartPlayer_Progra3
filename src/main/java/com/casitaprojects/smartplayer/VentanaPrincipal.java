@@ -29,6 +29,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelPlaylist vistaPlaylist;
         // El "portapapeles" para llevar la canción de una pantalla a otra
         public Cancion cancionPendiente = null;
+        
+        // --- VARIABLES PARA EL RELOJ Y SLIDER ---
+        private javax.swing.Timer timerReloj;
+        private int segundosTranscurridos = 0;
+        private int totalSegundosCancion = 0;
     
     
     public VentanaPrincipal() {
@@ -40,6 +45,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
         pnlCentral.add(vistaPlaylist, "CARTA_PLAYLIST");
+        
+        // ¡ARRANCAMOS EL CEREBRO DEL RELOJ!
+        configurarReloj();
+    }
+    
+    // --- METODO QUE MUEVE EL SLIDER DE TIEMPO ---
+    private void configurarReloj() {
+        // Configuramos el timer para que "haga tictac" cada 1000 milisegundos (1 segundo)
+        timerReloj = new javax.swing.Timer(1000, e -> {
+            MotorReproductor motor = MotorReproductor.getInstancia();
+            
+            // Si está pausado o no hay música, el reloj no avanza
+            if (motor.estaPausado() || gestor.listaReproduccion.getCancionActual() == null) {
+                return; 
+            }
+            
+            // Avanzamos 1 segundo
+            segundosTranscurridos++;
+            sldTime.setValue(segundosTranscurridos); // Movemos la bolita del slider
+            
+            // Formateamos el texto para que se vea como reloj digital "MM:SS"
+            int mins = segundosTranscurridos / 60;
+            int segs = segundosTranscurridos % 60;
+            lblTime.setText(String.format("%02d:%02d", mins, segs));
+            
+            // Si el reloj llega al final, lo detenemos (el Autoplay hará el resto)
+            if (segundosTranscurridos >= totalSegundosCancion) {
+                timerReloj.stop();
+            }
+        });
     }
     
     // --- METODO RECURSIVO ---
@@ -328,11 +363,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTitulo.setText("TITULO");
         pnlDatos.add(lblTitulo);
 
-        lblArtista.setForeground(new java.awt.Color(255, 255, 255));
         lblArtista.setText("Artista");
         pnlDatos.add(lblArtista);
 
-        lblAlbum.setForeground(new java.awt.Color(255, 255, 255));
         lblAlbum.setText("Album");
         pnlDatos.add(lblAlbum);
 
@@ -383,6 +416,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblDuracion.setForeground(new java.awt.Color(255, 255, 255));
         lblDuracion.setText("00:00");
 
+        lblTime.setForeground(new java.awt.Color(255, 255, 255));
         lblTime.setText("00:00");
 
         javax.swing.GroupLayout PlayerInferiorLayout = new javax.swing.GroupLayout(PlayerInferior);
@@ -751,6 +785,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
             lblCaratula.setIcon(null);
             lblCaratula.setText("Error Portada");
+        }
+        
+        // ... (todo lo de la carátula está arriba de esto)
+        
+        // 4. SINCRONIZAMOS EL SLIDER Y EL RELOJ
+        try {
+            // Convertimos el "03:45" en segundos totales para el tamaño del slider
+            String[] partes = cancion.getDuracion().split(":");
+            totalSegundosCancion = (Integer.parseInt(partes[0]) * 60) + Integer.parseInt(partes[1]);
+            
+            sldTime.setMaximum(totalSegundosCancion); // El final del slider
+            sldTime.setValue(0); // Regresamos la bolita al inicio
+            segundosTranscurridos = 0; // Reseteamos nuestra cuenta
+            
+            // Encendemos el reloj si estaba apagado
+            if (!timerReloj.isRunning()) {
+                timerReloj.start();
+            }
+        } catch (Exception e) {
+            System.out.println("Error configurando el tiempo: " + e.getMessage());
         }
     }
     

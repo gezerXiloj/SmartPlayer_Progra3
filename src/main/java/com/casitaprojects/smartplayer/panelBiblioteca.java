@@ -34,6 +34,7 @@ public class panelBiblioteca extends javax.swing.JPanel {
 
         setForeground(new java.awt.Color(0, 0, 0));
 
+        tblBiblioteca.setBackground(new java.awt.Color(51, 51, 51));
         tblBiblioteca.setForeground(new java.awt.Color(255, 255, 255));
         tblBiblioteca.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
