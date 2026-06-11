@@ -78,5 +78,9 @@ private Nodo raiz;
             return rotacionIzquierda(nodo);
         }
         return nodo;
-    }    
+    } 
+    
+    public Nodo getRaiz() {
+        return raiz;
+    }
 }

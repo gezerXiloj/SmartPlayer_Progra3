@@ -79,7 +79,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     // --- NUEVO: EVENTOS PARA ARRASTRAR EL SLIDER ---
     private void configurarEventosSlider() {
-        // Evento 1: Mientras arrastras el mouse (Actualiza el tiempo en vivo)
+        // Evento 1: Mientras arrastras el mouse en el Tiempo (Actualiza el texto en vivo)
         sldTime.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 usuarioArrastrando = true;
@@ -92,7 +92,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        // Evento 2: Cuando sueltas el click (Da el salto en la canción)
+        // Evento 2: Cuando sueltas el click en el Tiempo (Da el salto en la canción)
         sldTime.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 usuarioArrastrando = true; // Avisamos que tocaste el slider
@@ -114,6 +114,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     // Arrancamos el timer por si estaba apagado
                     if (!timerReloj.isRunning()) { timerReloj.start(); }
                 }
+            }
+        }); 
+
+        // --- EVENTO PARA EL SLIDER DE VOLUMEN ---
+        sldVolumen.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
+                int volumenActual = sldVolumen.getValue(); // Obtiene el valor (0 a 100)
+                
+                // Le pasamos el valor al motor en tiempo real mientras se arrastra
+                MotorReproductor.getInstancia().setVolumen(volumenActual);
             }
         });
     }
@@ -452,7 +463,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        lblVol.setText("jLabel4");
+        lblVol.setText("Vol.");
 
         lblDuracion.setForeground(new java.awt.Color(255, 255, 255));
         lblDuracion.setText("00:00");
@@ -497,7 +508,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PlayerInferiorLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37))))
@@ -522,7 +533,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                     .addGroup(PlayerInferiorLayout.createSequentialGroup()
                                         .addGap(26, 26, 26)
                                         .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(sldVolumen, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(lblVol, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(PlayerInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -578,7 +589,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArbolABBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolABBActionPerformed
-        // TODO add your handling code here:
+        // Instanciamos el visor local pasándole esta ventana como padre
+        VisorJGraphX visor = new VisorJGraphX(this, true);
+        // Le mandamos la raíz de tu ABB real
+        visor.mostrarABB(gestor.arbolABB.getRaiz());
     }//GEN-LAST:event_btnArbolABBActionPerformed
 
     private void btnBlibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBlibliotecaActionPerformed
@@ -633,7 +647,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPlaylistActionPerformed
 
     private void btnAVLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAVLActionPerformed
-        // TODO add your handling code here:
+        VisorJGraphX visor = new VisorJGraphX(this, true);
+        // Le mandamos la raíz de tu AVL real
+        visor.mostrarAVL(gestor.arbolAVL.getRaiz());
     }//GEN-LAST:event_btnAVLActionPerformed
 
     private void btnEstadisticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticaActionPerformed

@@ -30,5 +30,9 @@ private Nodo raiz;
             raiz.derecho = insertarRec(raiz.derecho, cancion);
         }
         return raiz;
-    }    
+    }  
+    
+    public Nodo getRaiz() {
+        return raiz;
+    }
 }

@@ -127,5 +127,40 @@ package com.casitaprojects.smartplayer;
             System.out.println("Error al saltar: " + e.getMessage());
         }
     }
+    
+    // --- NUEVO: Método para cambiar el volumen del sistema ---
+    public void setVolumen(int porcentaje) {
+        try {
+            // El slider va de 0 a 100. Aseguramos límites.
+            if (porcentaje < 0) porcentaje = 0;
+            if (porcentaje > 100) porcentaje = 100;
+
+            // Buscamos la línea de audio activa en el sistema
+            javax.sound.sampled.Mixer.Info[] mixers = javax.sound.sampled.AudioSystem.getMixerInfo();
+            for (javax.sound.sampled.Mixer.Info mixerInfo : mixers) {
+                javax.sound.sampled.Mixer mixer = javax.sound.sampled.AudioSystem.getMixer(mixerInfo);
+                javax.sound.sampled.Line[] lines = mixer.getSourceLines();
+                
+                for (javax.sound.sampled.Line line : lines) {
+                    if (line.isOpen() && line.isControlSupported(javax.sound.sampled.FloatControl.Type.MASTER_GAIN)) {
+                        javax.sound.sampled.FloatControl gainControl = 
+                            (javax.sound.sampled.FloatControl) line.getControl(javax.sound.sampled.FloatControl.Type.MASTER_GAIN);
+                        
+                        // Conversión matemática de porcentaje (0-100) a decibelios
+                        float dB = (float) (Math.log10(porcentaje / 100.0) * 20.0);
+                        if (porcentaje == 0) {
+                            dB = gainControl.getMinimum(); // Silencio total
+                        }
+                        
+                        gainControl.setValue(dB);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al ajustar volumen: " + e.getMessage());
+        }
+    }
+    
+    
 }    
 
