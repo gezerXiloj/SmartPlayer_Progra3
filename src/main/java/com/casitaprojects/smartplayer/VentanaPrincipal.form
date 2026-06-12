@@ -73,18 +73,15 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="btnColaReproduccion" max="32767" attributes="0"/>
-                          <Component id="btnHistorial" max="32767" attributes="0"/>
-                          <Component id="btnEstadistica" pref="134" max="32767" attributes="0"/>
-                          <Component id="btnAVL" max="32767" attributes="0"/>
-                          <Component id="btnArbolABB" max="32767" attributes="0"/>
-                          <Component id="btnPlaylist" max="32767" attributes="0"/>
-                          <Component id="btnBliblioteca" max="32767" attributes="0"/>
-                          <Component id="lblSmart" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="btnEncriptacion" alignment="0" min="-2" pref="134" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="btnColaReproduccion" max="32767" attributes="0"/>
+                      <Component id="btnHistorial" max="32767" attributes="0"/>
+                      <Component id="btnEstadistica" pref="134" max="32767" attributes="0"/>
+                      <Component id="btnAVL" max="32767" attributes="0"/>
+                      <Component id="btnArbolABB" max="32767" attributes="0"/>
+                      <Component id="btnPlaylist" max="32767" attributes="0"/>
+                      <Component id="btnBliblioteca" max="32767" attributes="0"/>
+                      <Component id="lblSmart" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -109,9 +106,7 @@
                   <Component id="btnHistorial" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btnColaReproduccion" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="btnEncriptacion" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="45" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -263,26 +258,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnColaReproduccionActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnEncriptacion">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="cc" red="cc" type="rgb"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="ENCRIPTACION"/>
-            <Property name="borderPainted" type="boolean" value="false"/>
-            <Property name="contentAreaFilled" type="boolean" value="false"/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEncriptacionActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

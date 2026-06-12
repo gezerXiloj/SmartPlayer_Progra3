@@ -124,7 +124,7 @@ public class panelPlaylist extends javax.swing.JPanel {
         menuOpciones = new javax.swing.JPopupMenu();
         itemRenombrar = new javax.swing.JMenuItem();
         itemExportar = new javax.swing.JMenuItem();
-        itemEncriptar = new javax.swing.JMenuItem();
+        itemDesEncriptar = new javax.swing.JMenuItem();
         itemEliminar = new javax.swing.JMenuItem();
         pnlDerecho = new javax.swing.JPanel();
         pnlIzquierdo = new javax.swing.JPanel();
@@ -133,13 +133,13 @@ public class panelPlaylist extends javax.swing.JPanel {
         btnMas = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         pnlMisPlaylis = new javax.swing.JPanel();
-        btnImportar = new javax.swing.JButton();
         pnlCabecera = new javax.swing.JPanel();
         lblPortada = new javax.swing.JLabel();
         lblNombPlay = new javax.swing.JLabel();
         lblCantidadTime = new javax.swing.JLabel();
         btnPlayLista = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
+        btnImportar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPlaylist = new javax.swing.JTable();
 
@@ -159,8 +159,13 @@ public class panelPlaylist extends javax.swing.JPanel {
         });
         menuOpciones.add(itemExportar);
 
-        itemEncriptar.setText("ENCRIPTAR");
-        menuOpciones.add(itemEncriptar);
+        itemDesEncriptar.setText("DESENCRIPTAR");
+        itemDesEncriptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemDesEncriptarActionPerformed(evt);
+            }
+        });
+        menuOpciones.add(itemDesEncriptar);
 
         itemEliminar.setText("ELIMINAR");
         menuOpciones.add(itemEliminar);
@@ -206,28 +211,15 @@ public class panelPlaylist extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnImportar.setText("IMPORTAR");
-        btnImportar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImportarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pnlMisPlaylisLayout = new javax.swing.GroupLayout(pnlMisPlaylis);
         pnlMisPlaylis.setLayout(pnlMisPlaylisLayout);
         pnlMisPlaylisLayout.setHorizontalGroup(
             pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMisPlaylisLayout.createSequentialGroup()
-                .addContainerGap(95, Short.MAX_VALUE)
-                .addComponent(btnImportar)
-                .addGap(15, 15, 15))
+            .addGap(0, 202, Short.MAX_VALUE)
         );
         pnlMisPlaylisLayout.setVerticalGroup(
             pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMisPlaylisLayout.createSequentialGroup()
-                .addContainerGap(264, Short.MAX_VALUE)
-                .addComponent(btnImportar)
-                .addGap(15, 15, 15))
+            .addGap(0, 306, Short.MAX_VALUE)
         );
 
         jScrollPane3.setViewportView(pnlMisPlaylis);
@@ -271,6 +263,13 @@ public class panelPlaylist extends javax.swing.JPanel {
             }
         });
 
+        btnImportar.setText("+");
+        btnImportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlCabeceraLayout = new javax.swing.GroupLayout(pnlCabecera);
         pnlCabecera.setLayout(pnlCabeceraLayout);
         pnlCabeceraLayout.setHorizontalGroup(
@@ -284,9 +283,11 @@ public class panelPlaylist extends javax.swing.JPanel {
                     .addComponent(lblCantidadTime))
                 .addGap(48, 48, 48)
                 .addComponent(btnPlayLista, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(btnImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         pnlCabeceraLayout.setVerticalGroup(
             pnlCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,6 +303,10 @@ public class panelPlaylist extends javax.swing.JPanel {
                         .addComponent(btnPlayLista, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCabeceraLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnImportar)
+                .addContainerGap())
         );
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -536,6 +541,39 @@ public class panelPlaylist extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_itemRenombrarActionPerformed
 
+    private void itemDesEncriptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemDesEncriptarActionPerformed
+        javax.swing.JOptionPane.showMessageDialog(this, "Selecciona el archivo TXT encriptado que deseas leer.", "Desencriptar Playlist", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        
+        javax.swing.JFileChooser explorador = new javax.swing.JFileChooser();
+        explorador.setDialogTitle("Seleccionar Playlist Encriptada");
+        int seleccion = explorador.showOpenDialog(this);
+        
+        if (seleccion == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivoEncriptado = explorador.getSelectedFile();
+            
+            // Creamos una ruta nueva agregando "_Legible" al final para no tocar el original
+            String nuevaRuta = archivoEncriptado.getAbsolutePath().replace(".txt", "_Legible.txt");
+            java.io.File archivoDesencriptado = new java.io.File(nuevaRuta);
+            
+            try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(archivoEncriptado));
+                 java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(archivoDesencriptado))) {
+                
+                String linea;
+                // Leemos línea por línea, desencriptamos y escribimos en el nuevo archivo
+                while ((linea = br.readLine()) != null) {
+                    pw.println(desencriptarTexto(linea));
+                }
+                
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "¡Archivo desencriptado con éxito!\nSe creó una copia que puedes leer normalmente en:\n" + nuevaRuta, 
+                    "Desencriptación Exitosa", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al desencriptar: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_itemDesEncriptarActionPerformed
+
     // --- GETTER PARA QUE VENTANA PRINCIPAL PUEDA VER ESTA TABLA ---
     public javax.swing.JTable getTablaPlaylist() {
         return tblPlaylist;
@@ -563,8 +601,8 @@ public class panelPlaylist extends javax.swing.JPanel {
     private javax.swing.JButton btnMas;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnPlayLista;
+    private javax.swing.JMenuItem itemDesEncriptar;
     private javax.swing.JMenuItem itemEliminar;
-    private javax.swing.JMenuItem itemEncriptar;
     private javax.swing.JMenuItem itemExportar;
     private javax.swing.JMenuItem itemRenombrar;
     private javax.swing.JScrollPane jScrollPane1;
