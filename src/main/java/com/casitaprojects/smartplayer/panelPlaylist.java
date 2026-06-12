@@ -133,6 +133,7 @@ public class panelPlaylist extends javax.swing.JPanel {
         btnMas = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         pnlMisPlaylis = new javax.swing.JPanel();
+        btnImportar = new javax.swing.JButton();
         pnlCabecera = new javax.swing.JPanel();
         lblPortada = new javax.swing.JLabel();
         lblNombPlay = new javax.swing.JLabel();
@@ -143,9 +144,19 @@ public class panelPlaylist extends javax.swing.JPanel {
         tblPlaylist = new javax.swing.JTable();
 
         itemRenombrar.setText("RENOMBRAR");
+        itemRenombrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemRenombrarActionPerformed(evt);
+            }
+        });
         menuOpciones.add(itemRenombrar);
 
         itemExportar.setText("EXPORTAR");
+        itemExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemExportarActionPerformed(evt);
+            }
+        });
         menuOpciones.add(itemExportar);
 
         itemEncriptar.setText("ENCRIPTAR");
@@ -195,15 +206,28 @@ public class panelPlaylist extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnImportar.setText("IMPORTAR");
+        btnImportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMisPlaylisLayout = new javax.swing.GroupLayout(pnlMisPlaylis);
         pnlMisPlaylis.setLayout(pnlMisPlaylisLayout);
         pnlMisPlaylisLayout.setHorizontalGroup(
             pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMisPlaylisLayout.createSequentialGroup()
+                .addContainerGap(95, Short.MAX_VALUE)
+                .addComponent(btnImportar)
+                .addGap(15, 15, 15))
         );
         pnlMisPlaylisLayout.setVerticalGroup(
             pnlMisPlaylisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 306, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMisPlaylisLayout.createSequentialGroup()
+                .addContainerGap(264, Short.MAX_VALUE)
+                .addComponent(btnImportar)
+                .addGap(15, 15, 15))
         );
 
         jScrollPane3.setViewportView(pnlMisPlaylis);
@@ -213,9 +237,7 @@ public class panelPlaylist extends javax.swing.JPanel {
         pnlIzquierdoLayout.setHorizontalGroup(
             pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlCabeceraPlay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnlIzquierdoLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane3)
         );
         pnlIzquierdoLayout.setVerticalGroup(
             pnlIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,7 +360,8 @@ public class panelPlaylist extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        // TODO add your handling code here:
+        // Esto hace que el menú aparezca justo debajo del botón de los 3 puntitos
+        menuOpciones.show(btnMenu, 0, btnMenu.getHeight());
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
@@ -399,12 +422,144 @@ public class panelPlaylist extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblPlaylistMouseClicked
 
+    private void itemExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExportarActionPerformed
+        if (playlistSeleccionadaActual == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Primero selecciona una playlist para exportar.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        javax.swing.JFileChooser explorador = new javax.swing.JFileChooser();
+        explorador.setDialogTitle("Exportar Playlist Encriptada");
+        int seleccion = explorador.showSaveDialog(this);
+
+        if (seleccion == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = explorador.getSelectedFile();
+            // Le forzamos la extensión .txt si el usuario no la puso
+            if (!archivo.getName().toLowerCase().endsWith(".txt")) {
+                archivo = new java.io.File(archivo.getParentFile(), archivo.getName() + ".txt");
+            }
+
+            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(archivo))) {
+
+                // 1. Guardamos el Nombre de la Playlist (Encriptado)
+                pw.println(encriptarTexto(playlistSeleccionadaActual.getNombre()));
+
+                // 2. Guardamos el TÍTULO de cada canción (Encriptado)
+                for (Cancion c : playlistSeleccionadaActual.getCanciones()) {
+                    pw.println(encriptarTexto(c.getTitulo()));
+                }
+
+                javax.swing.JOptionPane.showMessageDialog(this, "¡Playlist exportada y encriptada con éxito!\nRevisa el archivo TXT, es ilegible sin desencriptar.");
+
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_itemExportarActionPerformed
+
+    private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
+        javax.swing.JFileChooser explorador = new javax.swing.JFileChooser();
+        explorador.setDialogTitle("Importar Playlist desde TXT");
+        int seleccion = explorador.showOpenDialog(this);
+        
+        if (seleccion == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = explorador.getSelectedFile();
+            VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+            
+            try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(archivo))) {
+                
+                // 1. Leemos y desencriptamos el nombre de la playlist (Primera línea)
+                String nombreEncriptado = br.readLine();
+                if (nombreEncriptado == null) return;
+                
+                String nombreOriginal = desencriptarTexto(nombreEncriptado);
+                Playlist nuevaPlaylist = new Playlist(nombreOriginal + " (Recuperada)");
+                
+                // 2. Leemos los títulos línea por línea, los desencriptamos y los buscamos
+                String lineaTitulo;
+                int cancionesAgregadas = 0;
+                
+                while ((lineaTitulo = br.readLine()) != null) {
+                    String tituloBuscado = desencriptarTexto(lineaTitulo);
+                    
+                    // Usamos la búsqueda visual de tu Tabla Hash por título
+                    java.util.List<Cancion> resultados = ventana.gestor.tablaHash.buscar(tituloBuscado);
+                    
+                    // Si encuentra coincidencias, agregamos la primera a la playlist
+                    if (!resultados.isEmpty()) {
+                        nuevaPlaylist.agregarCancion(resultados.get(0));
+                        cancionesAgregadas++;
+                    }
+                }
+                
+                // 3. Guardamos la playlist en el gestor y actualizamos la pantalla
+                ventana.gestor.crearPlaylist(nuevaPlaylist);
+                actualizarListaPlaylists(); 
+                
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "¡Playlist desencriptada y cargada al sistema!\n\n" +
+                    "Nombre: " + nuevaPlaylist.getNombre() + "\n" +
+                    "Canciones recuperadas: " + cancionesAgregadas, 
+                    "Importación Exitosa", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al importar. El archivo podría estar corrupto: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnImportarActionPerformed
+
+    private void itemRenombrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRenombrarActionPerformed
+                                             
+        // 1. Verificamos que de verdad haya una playlist seleccionada en pantalla
+        if (playlistSeleccionadaActual == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Primero selecciona la playlist que quieres renombrar.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Mostramos la ventanita pidiendo el nuevo nombre (y le ponemos el actual por defecto para que sea más fácil editar)
+        String nombreActual = playlistSeleccionadaActual.getNombre();
+        String nuevoNombre = javax.swing.JOptionPane.showInputDialog(this, "Ingresa el nuevo nombre para tu playlist:", nombreActual);
+        
+        // 3. Validamos que el usuario no haya dado "Cancelar" o lo dejara en blanco
+        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+            
+            // Le cambiamos el nombre internamente al objeto
+            playlistSeleccionadaActual.setNombre(nuevoNombre.trim());
+            
+            // Actualizamos el título grande de la pantalla
+            lblNombPlay.setText(playlistSeleccionadaActual.getNombre());
+            
+            // Refrescamos los botones de la barra izquierda para que ya salga con el nuevo nombre
+            actualizarListaPlaylists(); 
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Nombre actualizado al cien!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_itemRenombrarActionPerformed
+
     // --- GETTER PARA QUE VENTANA PRINCIPAL PUEDA VER ESTA TABLA ---
     public javax.swing.JTable getTablaPlaylist() {
         return tblPlaylist;
     }
+    
+    // --- ALGORITMO PROPIO DE ENCRIPTACIÓN / DESENCRIPTACIÓN (Cifrado César +3) ---
+    private String encriptarTexto(String texto) {
+        StringBuilder encriptado = new StringBuilder();
+        for (char c : texto.toCharArray()) {
+            encriptado.append((char) (c + 3)); // Suma 3 posiciones a la letra
+        }
+        return encriptado.toString();
+    }
+
+    private String desencriptarTexto(String textoEncriptado) {
+        StringBuilder desencriptado = new StringBuilder();
+        for (char c : textoEncriptado.toCharArray()) {
+            desencriptado.append((char) (c - 3)); // Resta 3 posiciones para recuperar la letra original
+        }
+        return desencriptado.toString();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnImportar;
     private javax.swing.JButton btnMas;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnPlayLista;
