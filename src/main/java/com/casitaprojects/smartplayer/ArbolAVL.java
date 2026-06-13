@@ -83,4 +83,23 @@ private Nodo raiz;
     public Nodo getRaiz() {
         return raiz;
     }
+    
+    // --- MÉTODO DE BÚSQUEDA ---
+    public Cancion buscar(String titulo) {
+        Nodo resultado = buscarRec(raiz, titulo);
+        return (resultado != null) ? resultado.cancion : null;
+    }
+
+    private Nodo buscarRec(Nodo raiz, String titulo) {
+        // Si la raíz es nula o si el título coincide (ignorando mayúsculas)
+        if (raiz == null || raiz.cancion.getTitulo().equalsIgnoreCase(titulo)) {
+            return raiz;
+        }
+        // Si el título buscado es alfabéticamente menor, buscamos en la izquierda
+        if (titulo.compareToIgnoreCase(raiz.cancion.getTitulo()) < 0) {
+            return buscarRec(raiz.izquierdo, titulo);
+        }
+        // Si es mayor, buscamos en la derecha
+        return buscarRec(raiz.derecho, titulo);
+    }
 }

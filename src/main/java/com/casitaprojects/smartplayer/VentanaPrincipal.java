@@ -27,6 +27,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // Sacamos los paneles aquí afuera para poder usarlos en los botones
         panelBiblioteca vistaBiblioteca;
         panelPlaylist vistaPlaylist;
+        panelEstadistica vistaEstadistica;
+        panelHistorial vistaHistorial;
+        
         // El "portapapeles" para llevar la canción de una pantalla a otra
         public Cancion cancionPendiente = null;
         
@@ -43,9 +46,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // Inicializamos los paneles
         vistaBiblioteca = new panelBiblioteca();
         vistaPlaylist = new panelPlaylist();
+        vistaEstadistica = new panelEstadistica(); 
+        vistaHistorial = new panelHistorial();
         
         pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
         pnlCentral.add(vistaPlaylist, "CARTA_PLAYLIST");
+        pnlCentral.add(vistaEstadistica, "CARTA_ESTADISTICA");
+        pnlCentral.add(vistaHistorial, "CARTA_HISTORIAL");
         
         // ¡ARRANCAMOS EL CEREBRO DEL RELOJ!
         configurarReloj();
@@ -635,11 +642,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAVLActionPerformed
 
     private void btnEstadisticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticaActionPerformed
-        // TODO add your handling code here:
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        layout.show(pnlCentral, "CARTA_ESTADISTICA");
+        
+        // ¡Llamamos a los cálculos usando la variable que sí declaramos!
+        vistaEstadistica.calcularEstadisticas(this);
     }//GEN-LAST:event_btnEstadisticaActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        // TODO add your handling code here:
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        layout.show(pnlCentral, "CARTA_HISTORIAL");
+        
+        // Ejecutamos la lógica de la pila
+        vistaHistorial.actualizarHistorial(this);
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnColaReproduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColaReproduccionActionPerformed
@@ -777,7 +792,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     // --- METODO PARA REPRODUCIR Y ACTUALIZAR UI ---
     public void reproducirDesdeBiblioteca(Cancion cancion) {
-        
+        // --- GUARDAR PERSISTENCIA EN TXT ---
+        try (java.io.FileWriter fw = new java.io.FileWriter("reproducciones.txt", true);
+             java.io.PrintWriter pw = new java.io.PrintWriter(fw)) {
+            pw.println(cancion.getId()); // Guarda el ID de la canción en el archivo
+        } catch (Exception e) {
+            System.out.println("Error al guardar registro de reproducción.");}
         // 1. Encendemos la música y configuramos la acción automática al terminar
         MotorReproductor motor = MotorReproductor.getInstancia();
         motor.reproducirCancion(cancion.getRutaArchivo());
