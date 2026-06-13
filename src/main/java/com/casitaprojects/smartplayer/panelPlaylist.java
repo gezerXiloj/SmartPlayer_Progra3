@@ -25,6 +25,30 @@ public class panelPlaylist extends javax.swing.JPanel {
         initComponents();
         // Configuramos el panel izquierdo para que los botones se apilen hacia abajo
         pnlMisPlaylis.setLayout(new javax.swing.BoxLayout(pnlMisPlaylis, javax.swing.BoxLayout.Y_AXIS));
+        itemEliminar.setText("ELIMINAR");
+        // --- AGREGA ESTAS LÍNEAS PARA VINCULAR EL EVENTO ---
+        itemEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEliminarActionPerformed(evt);
+            }
+        });
+        // ---------------------------------------------------
+        menuOpciones.add(itemEliminar);
+        
+        // =========================================================================
+        // --- NUEVO: CREAR EL MENÚ DE CLIC DERECHO PARA LA TABLA DE CANCIONES ---
+        javax.swing.JPopupMenu menuTabla = new javax.swing.JPopupMenu();
+        javax.swing.JMenuItem itemQuitarCancion = new javax.swing.JMenuItem("Quitar de la Playlist");
+        
+        itemQuitarCancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitarCancionSeleccionada();
+            }
+        });
+        
+        menuTabla.add(itemQuitarCancion);
+        tblPlaylist.setComponentPopupMenu(menuTabla); // ¡Lo atamos a la tabla!
+        // =========================================================================
     }
 
     // --- 1. DIBUJAR LAS PLAYLISTS A LA IZQUIERDA ---
@@ -168,6 +192,11 @@ public class panelPlaylist extends javax.swing.JPanel {
         menuOpciones.add(itemDesEncriptar);
 
         itemEliminar.setText("ELIMINAR");
+        itemEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEliminarActionPerformed(evt);
+            }
+        });
         menuOpciones.add(itemEliminar);
 
         javax.swing.GroupLayout pnlDerechoLayout = new javax.swing.GroupLayout(pnlDerecho);
@@ -574,6 +603,48 @@ public class panelPlaylist extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_itemDesEncriptarActionPerformed
 
+    private void itemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEliminarActionPerformed
+        // 1. Verificamos que haya una playlist seleccionada
+        if (playlistSeleccionadaActual == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Primero selecciona la playlist que quieres eliminar.", 
+                "Aviso", 
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Pedimos confirmación para no borrarla por error
+        int confirmacion = javax.swing.JOptionPane.showConfirmDialog(this, 
+            "¿Estás seguro de que quieres eliminar la playlist '" + playlistSeleccionadaActual.getNombre() + "'?\nEsta acción no se puede deshacer.", 
+            "Confirmar Eliminación", 
+            javax.swing.JOptionPane.YES_NO_OPTION, 
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            // 3. Obtenemos el gestor desde la ventana principal
+            VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+            
+            // 4. La eliminamos de la memoria del programa
+            ventana.gestor.misPlaylists.remove(playlistSeleccionadaActual);
+            
+            // 5. Dejamos la pantalla "en blanco" porque ya no existe la playlist
+            playlistSeleccionadaActual = null;
+            lblNombPlay.setText("Selecciona una Playlist");
+            lblCantidadTime.setText("");
+            lblPortada.setIcon(null);
+            lblPortada.setText("Vacía");
+            ((javax.swing.table.DefaultTableModel) tblPlaylist.getModel()).setRowCount(0); // Vaciamos la tabla
+            
+            // 6. Refrescamos la barra de botones izquierda
+            actualizarListaPlaylists();
+            
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Playlist eliminada con éxito.", 
+                "Eliminada", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_itemEliminarActionPerformed
+
     // --- GETTER PARA QUE VENTANA PRINCIPAL PUEDA VER ESTA TABLA ---
     public javax.swing.JTable getTablaPlaylist() {
         return tblPlaylist;
@@ -594,6 +665,45 @@ public class panelPlaylist extends javax.swing.JPanel {
             desencriptado.append((char) (c - 3)); // Resta 3 posiciones para recuperar la letra original
         }
         return desencriptado.toString();
+    }
+    
+    // --- NUEVO: MÉTODO PARA QUITAR SOLO UNA CANCIÓN DE LA PLAYLIST ---
+    private void quitarCancionSeleccionada() {
+        // 1. Vemos qué fila tocó el usuario
+        int filaSeleccionada = tblPlaylist.getSelectedRow();
+        
+        if (filaSeleccionada != -1 && playlistSeleccionadaActual != null) {
+            
+            // 2. Extraemos el título de la canción seleccionada (asumiendo que está en la columna 1)
+            String tituloAQuitar = tblPlaylist.getValueAt(filaSeleccionada, 1).toString();
+            
+            // 3. Buscamos la canción en la playlist activa
+            Cancion cancionAQuitar = null;
+            for (Cancion c : playlistSeleccionadaActual.getCanciones()) {
+                if (c.getTitulo().equals(tituloAQuitar)) {
+                    cancionAQuitar = c;
+                    break;
+                }
+            }
+            
+            // 4. Si la encontramos, la borramos y actualizamos visualmente
+            if (cancionAQuitar != null) {
+                playlistSeleccionadaActual.getCanciones().remove(cancionAQuitar);
+                
+                // Refrescamos la tabla y los contadores de tiempo
+                actualizarDatosVisuales();
+                
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Canción eliminada de la playlist.", 
+                    "Éxito", 
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Por favor, selecciona una canción de la tabla primero.", 
+                "Aviso", 
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
