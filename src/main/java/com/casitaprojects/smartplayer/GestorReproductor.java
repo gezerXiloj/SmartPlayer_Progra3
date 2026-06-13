@@ -13,6 +13,7 @@ public class GestorReproductor {
     public ArbolAVL arbolAVL;
     public TablaHash tablaHash;
     public ListaDobleCircular listaReproduccion = new ListaDobleCircular();
+    public java.util.Queue<Cancion> colaReproduccion = new java.util.LinkedList<>();
     
     public java.util.List<Playlist> misPlaylists;
 

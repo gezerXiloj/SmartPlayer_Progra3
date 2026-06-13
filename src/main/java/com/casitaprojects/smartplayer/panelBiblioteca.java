@@ -16,6 +16,60 @@ public class panelBiblioteca extends javax.swing.JPanel {
      */
     public panelBiblioteca() {
         initComponents();
+        
+        // --- NUEVO: CREAMOS EL MENÚ DE CLIC DERECHO ---
+        javax.swing.JPopupMenu menuClickDerecho = new javax.swing.JPopupMenu();
+        javax.swing.JMenuItem itemAgregarCola = new javax.swing.JMenuItem("Añadir a la Cola");
+        
+        // Le damos la acción de qué hacer cuando lo presionen
+        itemAgregarCola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarCancionSeleccionadaACola();
+            }
+        });
+        
+        menuClickDerecho.add(itemAgregarCola);
+        
+        // Enlazamos este menú mágicamente a tu tabla de la biblioteca
+        tblBiblioteca.setComponentPopupMenu(menuClickDerecho);
+    }
+    
+    // --- MÉTODO PARA ENVIAR A LA COLA ---
+    private void agregarCancionSeleccionadaACola() {
+        int filaSeleccionada = tblBiblioteca.getSelectedRow();
+        
+        if (filaSeleccionada != -1) {
+            // Obtenemos la ventana principal para acceder al Gestor
+            VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+            
+            // Sacamos el nombre de la canción de la fila seleccionada (asumiendo que el título está en la columna 1)
+            String tituloSeleccionado = tblBiblioteca.getValueAt(filaSeleccionada, 1).toString();
+            
+            // Buscamos el objeto Cancion real en tu lista principal
+            Cancion cancionEncontrada = null;
+            for (Cancion c : ventana.listaTemporal) {
+                if (c.getTitulo().equals(tituloSeleccionado)) {
+                    cancionEncontrada = c;
+                    break;
+                }
+            }
+            
+            if (cancionEncontrada != null) {
+                // El método .offer() es el que inserta elementos en una Cola (Queue)
+                ventana.gestor.colaReproduccion.offer(cancionEncontrada);
+                
+                // Mostramos un diálogo visual y elegante confirmando la acción
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Se añadió a la cola:\n" + cancionEncontrada.getTitulo(), 
+                    "Añadido exitosamente", 
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Por favor, selecciona una canción primero.", 
+                "Aviso", 
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**

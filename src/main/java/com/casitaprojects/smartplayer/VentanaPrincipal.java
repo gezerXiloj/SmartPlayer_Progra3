@@ -29,6 +29,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelPlaylist vistaPlaylist;
         panelEstadistica vistaEstadistica;
         panelHistorial vistaHistorial;
+        panelCola vistaCola;
         
         // El "portapapeles" para llevar la canción de una pantalla a otra
         public Cancion cancionPendiente = null;
@@ -48,11 +49,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         vistaPlaylist = new panelPlaylist();
         vistaEstadistica = new panelEstadistica(); 
         vistaHistorial = new panelHistorial();
+        vistaCola = new panelCola();
+        
         
         pnlCentral.add(vistaBiblioteca, "CARTA_BIBLIOTECA");
         pnlCentral.add(vistaPlaylist, "CARTA_PLAYLIST");
         pnlCentral.add(vistaEstadistica, "CARTA_ESTADISTICA");
         pnlCentral.add(vistaHistorial, "CARTA_HISTORIAL");
+        pnlCentral.add(vistaCola, "CARTA_COLA");
         
         // ¡ARRANCAMOS EL CEREBRO DEL RELOJ!
         configurarReloj();
@@ -658,7 +662,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnColaReproduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColaReproduccionActionPerformed
-        // TODO add your handling code here:
+        java.awt.CardLayout layout = (java.awt.CardLayout) pnlCentral.getLayout();
+        layout.show(pnlCentral, "CARTA_COLA");
+        
+        // Refrescamos la tabla para ver qué canciones están formadas
+        vistaCola.actualizarCola(this);
     }//GEN-LAST:event_btnColaReproduccionActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -707,18 +715,34 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        // 1. Validamos si el Bucle está activado
+        // --- 1. PRIORIDAD ABSOLUTA: LA COLA DE REPRODUCCIÓN ---
+        if (gestor.colaReproduccion != null && !gestor.colaReproduccion.isEmpty()) {
+            
+            Cancion siguienteDeLaCola = gestor.colaReproduccion.poll(); // Saca y borra de la cola
+            reproducirDesdeBiblioteca(siguienteDeLaCola);
+            resaltarFilaEnTabla(siguienteDeLaCola);
+            
+            if (vistaCola != null && vistaCola.isShowing()) {
+                vistaCola.actualizarCola(this);
+            }
+            
+            return; // ¡ESTO ES CLAVE! Detiene el método aquí para no alterar tu playlist o biblioteca.
+        }
+
+        // --- 2. FLUJO NORMAL (BIBLIOTECA O PLAYLIST) ---
+        // ¡Tu lógica original está intacta aquí abajo!
+        // Como 'listaReproduccion' ya está cargada con la playlist o biblioteca actual, funciona perfecto.
         if (tbtnBucle.isSelected()) {
             Cancion actual = gestor.listaReproduccion.getCancionActual();
             if (actual != null) {
                 reproducirDesdeBiblioteca(actual);
             }
         } else {
-            // 2. Si no hay Bucle, avanzamos normal (con o sin Shuffle)
+            //  Si no hay Bucle, avanzamos normal (con o sin Shuffle)
             Cancion siguiente = gestor.listaReproduccion.obtenerSiguiente(tbtnShuffle.isSelected());
             if (siguiente != null) {
                 reproducirDesdeBiblioteca(siguiente);
-                resaltarFilaEnTabla(siguiente); // Movemos la rayita azul
+                resaltarFilaEnTabla(siguiente); 
             }                                       
         }
     }//GEN-LAST:event_btnNextActionPerformed
