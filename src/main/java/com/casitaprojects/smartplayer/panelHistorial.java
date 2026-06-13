@@ -16,6 +16,8 @@ public class panelHistorial extends javax.swing.JPanel {
     public panelHistorial() {
         initComponents();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,19 +28,158 @@ public class panelHistorial extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblBiblioteca = new javax.swing.JTable();
+        btnLimpiar = new javax.swing.JButton();
+
+        tblBiblioteca.setBackground(new java.awt.Color(51, 51, 51));
+        tblBiblioteca.setForeground(new java.awt.Color(255, 255, 255));
+        tblBiblioteca.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No.", "TITULO", "ARTISTA", "ALBUM", "GENERO", "DURACION", "AÑO"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblBiblioteca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBibliotecaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblBiblioteca);
+
+        btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLimpiar)
+                .addGap(89, 89, 89))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(btnLimpiar)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // --- VARIABLE GLOBAL DEL PANEL ---
+    private java.util.List<Cancion> listaActual = new java.util.ArrayList<>();
+
+    // --- EL MÉTODO MÁGICO CON PILAS (STACKS) ---
+    public void actualizarHistorial(VentanaPrincipal ventana) {
+        listaActual.clear();
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblBiblioteca.getModel();
+        modelo.setRowCount(0); // Limpiamos la tabla visual
+
+        java.io.File archivo = new java.io.File("reproducciones.txt");
+        if (!archivo.exists()) {
+            return; // Si no hay archivo, la tabla se queda vacía
+        }
+
+        // 1. Usar una Pila (Stack) para apilar los IDs. ¡El último en entrar, quedará arriba!
+        java.util.Stack<String> pilaIds = new java.util.Stack<>();
+        
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(archivo))) {
+            String lineaId;
+            while ((lineaId = br.readLine()) != null) {
+                lineaId = lineaId.trim();
+                if (!lineaId.isEmpty()) {
+                    pilaIds.push(lineaId); // Lo apilamos
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error leyendo historial");
+        }
+
+        // 2. Desapilar (LIFO) y buscar la canción para llenar la tabla
+        int contador = 1;
+        while (!pilaIds.isEmpty()) {
+            String idBuscado = pilaIds.pop(); // Saca el elemento que está hasta arriba (el más reciente)
+
+            // Buscamos la canción en la biblioteca principal para sacar sus datos
+            for (Cancion c : ventana.listaTemporal) {
+                if (c.getId().equals(idBuscado)) {
+                    listaActual.add(c); // La guardamos en la lista local para el doble clic
+                    // La inyectamos a la tabla
+                    modelo.addRow(new Object[]{
+                        contador++, 
+                        c.getTitulo(), 
+                        c.getArtista(), 
+                        c.getAlbum(), 
+                        c.getGenero(), 
+                        c.getDuracion(), 
+                        c.getAnio()
+                    });
+                    break; 
+                }
+            }
+        }
+    }
+    private void tblBibliotecaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBibliotecaMouseClicked
+        // Validamos si fueron 2 clics
+        if (evt.getClickCount() == 2) {
+            int filaSeleccionada = tblBiblioteca.getSelectedRow();
+            if (filaSeleccionada != -1 && listaActual != null) {
+
+                Cancion cancionClickeada = listaActual.get(filaSeleccionada);
+                VentanaPrincipal ventana = (VentanaPrincipal) javax.swing.SwingUtilities.getWindowAncestor(this);
+
+                // --- CARGAMOS LA LISTA DOBLE CIRCULAR ---
+                ventana.gestor.listaReproduccion.cargarLista(listaActual, cancionClickeada);
+
+                ventana.reproducirDesdeBiblioteca(cancionClickeada);
+            }
+        }
+    }//GEN-LAST:event_tblBibliotecaMouseClicked
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        try {
+            // Sobreescribimos el archivo de texto dejándolo completamente en blanco
+            java.io.PrintWriter writer = new java.io.PrintWriter("reproducciones.txt");
+            writer.print("");
+            writer.close();
+            
+            // Limpiamos la tabla visualmente
+            listaActual.clear();
+            javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblBiblioteca.getModel();
+            modelo.setRowCount(0);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Historial limpiado con éxito!", "Limpieza", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al limpiar el historial", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblBiblioteca;
     // End of variables declaration//GEN-END:variables
 }
